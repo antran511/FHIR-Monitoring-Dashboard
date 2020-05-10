@@ -2,46 +2,98 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using FHIR_FIT3077.IRepositories;
+using FHIR_FIT3077.IRepository;
 using FHIR_FIT3077.Models;
-using Hl7.Fhir.Rest;
+using FHIR_FIT3077.Repository;
+using FHIR_FIT3077.ViewModel;
+using FHIR_FIT3077.ViewModels;
 using Hl7.Fhir.Model;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace FHIR_FIT3077.Controllers
 {
     public class PractitionerController : Controller
     {
-        // GET practitioner
-        public ActionResult PractitionerView(string id)
+        [HttpGet]
+        public IActionResult Index()
         {
-            var client = new FhirClient("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/");
-            client.PreferredFormat = ResourceFormat.Json;
-            client.UseFormatParam = true;
-            client.Timeout = 120000;
-
-            Bundle result = client.Search<Encounter>(new string[]
-            {
-                "participant.identifier=http://hl7.org/fhir/sid/us-npi|" + id
-            });
-
-            Dictionary<string, string> patientHashMap = new Dictionary<string, string>();
-            foreach (var e in result.Entry)
-            {
-                Encounter p = (Encounter)e.Resource;
-                var patient = p.Subject.Reference;
-                var patientId = patient.Split('/')[1];
-                var patientName = p.Subject.Display;
-                patientHashMap[patientId] = patientName;
-            }
-
-            foreach (KeyValuePair<string, string> pair in patientHashMap)
-            {
-                Console.WriteLine("ID: " + pair.Key);
-                Console.WriteLine("Name: " + pair.Value);
-            }
-
-            ViewData["Message"] = patientHashMap;
             return View();
         }
+
+        private readonly IPractitionerRepository _practitioner;
+        private readonly ICacheRepository _cache;
+
+        public PractitionerController(IPractitionerRepository practitioner, ICacheRepository distributedCache)
+        {
+            _practitioner = practitioner;
+            _cache = distributedCache;
+        }
+
+        [HttpPost]
+        [ActionName("SubmitId")]
+        public IActionResult SubmitId(PractitionerModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                return RedirectToAction("LoadPatient", new {id = model.Id});
+            }
+
+            return Index();
+        }
+
+
+        //This method load all unique patients from the server and store the list in cache
+        public IActionResult LoadPatient(string id)
+        {
+            var patientModel = new PatientViewModel();
+            if (_cache.ExistObject<Dictionary<string, PatientModel>>(id.ToString()) == true)
+            {
+                var patientsFromCache = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
+            }
+            else
+            {
+                patientModel.PatientList = _practitioner.GetPatient(id);
+                _cache.SetObject("Patients", patientModel.PatientList);
+                
+            }
+            return View(patientModel);
+        }
+
+        //This method registers a patient from the monitor list stored in cache by id
+        [HttpPost]
+        public IActionResult DeregisterPatient(string id)
+        {
+            var monitorModel = new MonitorViewModel();
+            monitorModel.MonitorList = _practitioner.DeregisterPatient(id,
+                _cache.GetObject<Dictionary<string, PatientModel>>("Monitor"));
+            _cache.SetObject("Monitor", monitorModel.MonitorList);
+
+            return PartialView(monitorModel);
+        }
+
+        //This method deregisters a patient from the monitor list stored in cache by id
+        [HttpPost]
+        public IActionResult RegisterPatient(string id)
+        {
+            var monitorModel = new MonitorViewModel();
+            if (_cache.ExistObject<List<PatientModel>>("Monitor") == true)
+            {
+                var patientsFromCache = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
+            }
+            else
+            {
+                monitorModel.MonitorList = _practitioner.RegisterPatient(id,
+                    _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString()),
+                    _cache.GetObject<Dictionary<string, PatientModel>>("Monitor"));
+                _cache.SetObject("Monitor", monitorModel.MonitorList);
+            }
+            return PartialView(monitorModel);
+        }
+
+        
     }
 }

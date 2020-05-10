@@ -1,0 +1,66 @@
+﻿@using Hl7.Fhir.Model
+@using FHIR_FIT3077.ViewModel
+@using FHIR_FIT3077.ViewModels
+@model FHIR_FIT3077.ViewModel.PatientViewModel;
+@{
+    ViewData["Title"] = "Patients";
+}
+<html>
+<body>
+    <h1>List</h1>
+    <form method="post">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Patient</th>
+                <th>Monitor</th>
+            </tr>
+            @foreach (var patient in Model.PatientList)
+            {
+                <tr>
+                    <td><p>@patient.Key</p></td>
+                    <td><p>@patient.Value.Name</p></td>
+                    <asp:CheckBox ID="DraftCheckBox" runat="server" Text="Save as Draft?" />
+                    <td><input type="checkbox" id="@patient.Key" onchange="checkChanged(@patient.Key)" /></td>
+                </tr>
+            }
+        </table>
+    </form>
+
+    <div id="monitorView">
+        <partial name="_MonitorSection" for="PatientList" />
+    </div>
+
+</body>
+</html>
+
+
+<script>
+    function checkChanged(id) {
+        if ($('#' + id).is(":checked")) {
+            $.ajax({
+                type: "POST",
+                url: "RegisterPatient",
+                data: { Id: id },
+                success: function (result) {
+                    $("#monitorView").html(result);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "DeregisterPatient",
+                data: { Id: id },
+                success: function (result) {
+                    $("#monitorView").html(result);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        };
+    }
+</script>

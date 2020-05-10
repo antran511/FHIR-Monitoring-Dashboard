@@ -1,0 +1,11 @@
+﻿@using FHIR_FIT3077.Controllers
+@model FHIR_FIT3077.Models.PractitionerModel;
+@{
+    ViewData["Title"] = "Practitioner";
+    ViewBag.Title = "Practitioner";
+}
+@using (Html.BeginForm("SubmitId", "Practitioner", FormMethod.Post))
+{
+    @Html.TextBoxFor(m => m.Id)
+    <input type="submit" value="Submit" />
+}

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hl7.Fhir.R4" Version="1.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
   </ItemGroup>
 

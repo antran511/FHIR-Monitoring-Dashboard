@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FHIR_FIT3077.IRepositories;
+using FHIR_FIT3077.IRepository;
+using FHIR_FIT3077.Repositories;
+using FHIR_FIT3077.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +28,13 @@ namespace FHIR_FIT3077
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IPractitionerRepository, PractitionerRepository>();
+            services.AddScoped<ICacheRepository, CacheRepository>();
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379";
+                options.InstanceName = "FHIR_FIT3077";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

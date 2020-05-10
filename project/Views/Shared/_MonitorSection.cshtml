@@ -1,0 +1,21 @@
+﻿@model FHIR_FIT3077.ViewModels.MonitorViewModel
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.MonitorList) {
+        <tr>
+            <td>
+                @item.Value.Name
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
