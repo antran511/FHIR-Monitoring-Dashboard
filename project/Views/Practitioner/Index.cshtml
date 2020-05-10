@@ -7,5 +7,6 @@
 @using (Html.BeginForm("SubmitId", "Practitioner", FormMethod.Post))
 {
     @Html.TextBoxFor(m => m.Id)
-    <input type="submit" value="Submit" />
+    @Html.ValidationMessageFor(m => m.Id)
+    <button type="submit" value="Submit">Submit</button>
 }

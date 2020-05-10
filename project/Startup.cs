@@ -61,7 +61,7 @@ namespace FHIR_FIT3077
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Login}/{id?}");
+                    pattern: "{controller=Practitioner}/{action=Index}/{id?}");
             });
         }
     }
