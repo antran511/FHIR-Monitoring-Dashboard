@@ -30,7 +30,7 @@ namespace FHIR_FIT3077.Repository
                 var res = p.Subject.Reference;
                 var patientId = res.Split('/')[1];
                 var patientName = p.Subject.Display;
-                var patient = new PatientModel() {Name = patientName };
+                var patient = new PatientModel() { Id = patientId, Name = patientName };
                 if (!patientList.ContainsKey(patientId))
                 {
                     patientList.Add(patientId, patient);
