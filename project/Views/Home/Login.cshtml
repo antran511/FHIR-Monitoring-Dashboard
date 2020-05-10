@@ -1,0 +1,11 @@
+﻿@model FHIR_FIT3077.Models.Practitioner
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@using (Html.BeginForm("Login", "Home", FormMethod.Post))
+{
+    @Html.TextBoxFor(model => model.Id)
+    @Html.ValidationMessageFor(model => model.Id)
+    <button type="submit" value="Submit">Submit</button>
+}
