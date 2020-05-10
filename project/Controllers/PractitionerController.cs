@@ -68,11 +68,11 @@ namespace FHIR_FIT3077.Controllers
         public IActionResult DeregisterPatient(string id)
         {
             var monitorModel = new MonitorViewModel();
-            monitorModel.MonitorList = _practitioner.DeregisterPatient(id,
+            monitorModel.MonitorList = _practitioner.RemovePatient(id,
                 _cache.GetObject<Dictionary<string, PatientModel>>("Monitor"));
             _cache.SetObject("Monitor", monitorModel.MonitorList);
 
-            return PartialView(monitorModel);
+            return PartialView();
         }
 
         //This method deregisters a patient from the monitor list stored in cache by id
@@ -80,13 +80,13 @@ namespace FHIR_FIT3077.Controllers
         public IActionResult RegisterPatient(string id)
         {
             var monitorModel = new MonitorViewModel();
-            if (_cache.ExistObject<List<PatientModel>>("Monitor") == true)
+            if (_cache.ExistObject<List<PatientModel>>("Monitor") == false)
             {
                 var patientsFromCache = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
             }
             else
             {
-                monitorModel.MonitorList = _practitioner.RegisterPatient(id,
+                monitorModel.MonitorList = _practitioner.AddPatient(id,
                     _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString()),
                     _cache.GetObject<Dictionary<string, PatientModel>>("Monitor"));
                 _cache.SetObject("Monitor", monitorModel.MonitorList);

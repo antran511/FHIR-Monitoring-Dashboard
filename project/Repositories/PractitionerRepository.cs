@@ -41,22 +41,16 @@ namespace FHIR_FIT3077.Repository
 
         }
 
-        public Dictionary<string, PatientModel> RegisterPatient(string id, Dictionary<string, PatientModel> patientList, Dictionary<string, PatientModel> monitorList)
+        public Dictionary<string, PatientModel> AddPatient(string id, Dictionary<string, PatientModel> patientList, Dictionary<string, PatientModel> monitorList)
         {
             if (!monitorList.ContainsKey(id))
             {
                 monitorList.Add(id, patientList[id]);
             }
-            else
-            {
-                monitorList[id] = patientList[id];
-            }
-            
-
             return (monitorList);
         }
 
-        public Dictionary<string, PatientModel> DeregisterPatient(string id,
+        public Dictionary<string, PatientModel> RemovePatient(string id,
             Dictionary<string, PatientModel> monitorList)
         {
             if (monitorList.ContainsKey(id))
