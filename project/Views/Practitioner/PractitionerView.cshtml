@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "PractitionerView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>PractitionerView</h1>
+@{
+    var patientHashMap = (Dictionary<string, string>)ViewData["Message"];
+}
+@foreach (KeyValuePair<string, string> pair in patientHashMap)
+{
+    <input name="@pair.Key" type="checkbox" value="@pair.Value" />@pair.Value<br />
+}
+

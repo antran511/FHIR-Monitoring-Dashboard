@@ -11,26 +11,31 @@ namespace FHIR_FIT3077.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult GetPractitioner(PractitionerModel model)
+        public IActionResult Login(Practitioner practitioner)
         {
-            string message = "";
-            if (ModelState.IsValid)
-            {
-                message = "Practitioner" + model.Name + "found";
-            }
-            else
-            {
-                message = "Failed to find the practitioner. Please try again";
-            }
+            string practitionerId = practitioner.Id;
 
-            return Content(message);
+            return RedirectToAction("PractitionerView", "Practitioner", new { id = practitionerId });
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
