@@ -9,7 +9,7 @@ namespace FHIR_FIT3077.IRepository
 {
     public interface IPractitionerRepository
     {
-        Dictionary<string, PatientModel> GetPatient(string id);
+        Dictionary<string, PatientModel> GetTotalPatients(string id);
 
         Dictionary<string, PatientModel> RegisterPatient(string id, Dictionary<string, PatientModel> patientList,
             Dictionary<string, PatientModel> monitorList);

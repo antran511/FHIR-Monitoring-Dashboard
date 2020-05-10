@@ -56,14 +56,14 @@ namespace FHIR_FIT3077.Controllers
             }
             else
             {
-                patientModel.PatientList = _practitioner.GetPatient(id);
+                patientModel.PatientList = _practitioner.GetTotalPatients(id);
                 _cache.SetObject("Patients", patientModel.PatientList);
                 
             }
             return View(patientModel);
         }
 
-        //This method registers a patient from the monitor list stored in cache by id
+        //This method deregisters a patient from the monitor list stored in cache by id
         [HttpPost]
         public IActionResult DeregisterPatient(string id)
         {
@@ -75,14 +75,14 @@ namespace FHIR_FIT3077.Controllers
             return PartialView(monitorModel);
         }
 
-        //This method deregisters a patient from the monitor list stored in cache by id
+        //This method registers a patient from the monitor list stored in cache by id
         [HttpPost]
         public IActionResult RegisterPatient(string id)
         {
             var monitorModel = new MonitorViewModel();
             if (_cache.ExistObject<List<PatientModel>>("Monitor") == true)
             {
-                var patientsFromCache = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
+                monitorModel.MonitorList = _cache.GetObject<Dictionary<string, PatientModel>>("Monitor");
             }
             else
             {

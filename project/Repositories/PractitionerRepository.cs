@@ -16,7 +16,7 @@ namespace FHIR_FIT3077.Repository
             _client.Timeout = 120000;
         }
 
-        public Dictionary<string, PatientModel> GetPatient(string id)
+        public Dictionary<string, PatientModel> GetTotalPatients(string id)
         {
             InitializeClient();
             var patientList = new Dictionary<string, PatientModel>();
@@ -31,12 +31,40 @@ namespace FHIR_FIT3077.Repository
                 var patientId = res.Split('/')[1];
                 var patientName = p.Subject.Display;
                 var patient = new PatientModel() { Id = patientId, Name = patientName };
+
+                
                 if (!patientList.ContainsKey(patientId))
                 {
                     patientList.Add(patientId, patient);
                 }
             }
 
+            foreach (KeyValuePair<string, PatientModel> entry in patientList)
+            {
+                Bundle patientCholesterol = _client.Search<Observation>(new string[]
+                {
+                    "patient="+ $"{entry.Key}" +"&code=2093-3&_sort=date&_count=13"
+                });
+                try
+                {
+                    Console.WriteLine("code reach here");
+                    foreach (var o in patientCholesterol.Entry)
+                    {
+                        Observation item = (Observation)o.Resource;
+                        var cholesterolVal = item.Value.ToString();
+                        var date = item.Issued.ToString();
+                        var record = new RecordModel() { Cholesterol = cholesterolVal, Date = date };
+                        Console.WriteLine(cholesterolVal);
+                        Console.WriteLine(date + "\n");
+                        entry.Value.Records.Add(record);
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("No patient has cholesterol");
+                }
+            }
+            
             return(patientList);
 
         }
@@ -47,12 +75,7 @@ namespace FHIR_FIT3077.Repository
             {
                 monitorList.Add(id, patientList[id]);
             }
-            else
-            {
-                monitorList[id] = patientList[id];
-            }
             
-
             return (monitorList);
         }
 

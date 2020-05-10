@@ -11,6 +11,7 @@ namespace FHIR_FIT3077.Models
 
         public string Name { get; set; }
 
-        public string Cholesterol { get; set; }
+        public List<RecordModel> Records { get; set; }
+
     }
 }
