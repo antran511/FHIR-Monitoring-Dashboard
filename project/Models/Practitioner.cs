@@ -12,7 +12,5 @@ namespace FHIR_FIT3077.Models
         [Required]
         public string Id { get; set; }
 
-        [Required]
-        public List<Patients> PatientList { get; set; }
     }
 }
