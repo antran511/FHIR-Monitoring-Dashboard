@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FHIR_FIT3077.IRepository;
 using Hl7.Fhir.Model;
@@ -19,6 +19,7 @@ namespace FHIR_FIT3077.Repository
         public Dictionary<string, PatientModel> GetTotalPatients(string id)
         {
             InitializeClient();
+
             var patientList = new Dictionary<string, PatientModel>();
             Bundle result = _client.Search<Encounter>(new string[]
             {
@@ -31,7 +32,8 @@ namespace FHIR_FIT3077.Repository
                 var res = p.Subject.Reference;
                 var patientId = res.Split('/')[1];
                 var patientName = p.Subject.Display;
-                var patient = new PatientModel() { Id = patientId, Name = patientName};
+                var patient = new PatientModel() { Id = patientId, Name = patientName };
+>>>>>>> Repositories/PractitionerRepository.cs
 
                 
                 if (!patientList.ContainsKey(patientId))
@@ -56,6 +58,7 @@ namespace FHIR_FIT3077.Repository
                     Console.WriteLine(patient.Record.Date + "\n");
                 }
             }
+<<<<<<< Repositories/PractitionerRepository.cs
             
             return(patientList);
 
@@ -69,17 +72,8 @@ namespace FHIR_FIT3077.Repository
             }
             
             return (monitorList);
-        }
-
-        public Dictionary<string, PatientModel> DeregisterPatient(string id,
-            Dictionary<string, PatientModel> monitorList)
-        {
-            if (monitorList.ContainsKey(id))
-            {
-                monitorList.Remove(id);
-            }
-
-            return (monitorList);
+=======
+>>>>>>> Repositories/PractitionerRepository.cs
         }
     }
 }

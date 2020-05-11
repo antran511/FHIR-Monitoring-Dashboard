@@ -58,7 +58,6 @@ namespace FHIR_FIT3077.Controllers
             {
                 patientModel.PatientList = _practitioner.GetTotalPatients(id);
                 _cache.SetObject("Patients", patientModel.PatientList);
-                
             }
             return View(patientModel);
         }
