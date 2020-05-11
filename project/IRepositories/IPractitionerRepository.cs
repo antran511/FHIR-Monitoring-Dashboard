@@ -11,10 +11,7 @@ namespace FHIR_FIT3077.IRepository
     {
         Dictionary<string, PatientModel> GetPatient(string id);
 
-        Dictionary<string, PatientModel> AddPatient(string id, Dictionary<string, PatientModel> patientList,
-            Dictionary<string, PatientModel> monitorList);
-
-        Dictionary<string, PatientModel> RemovePatient(string id, Dictionary<string, PatientModel> monitorList);
+        
 
     }
 }

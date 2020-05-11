@@ -30,6 +30,7 @@ namespace FHIR_FIT3077
             services.AddControllersWithViews();
             services.AddScoped<IPractitionerRepository, PractitionerRepository>();
             services.AddScoped<ICacheRepository, CacheRepository>();
+            services.AddScoped<IMonitorRepository, MonitorRepository>();
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = "localhost:6379";

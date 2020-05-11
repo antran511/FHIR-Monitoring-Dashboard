@@ -6,11 +6,11 @@ using FHIR_FIT3077.Models;
 
 namespace FHIR_FIT3077.Observer
 {
-    public class PatientDataProvider : IObservable<PatientModel>
+    public class Subject : IObservable<PatientModel>
     {
         private List<IObserver<PatientModel>> observers;
 
-        public PatientDataProvider()
+        public Subject()
         {
             observers = new List<IObserver<PatientModel>>();
         }
@@ -20,6 +20,7 @@ namespace FHIR_FIT3077.Observer
             if (!observers.Contains(observer))
             {
                 observers.Add(observer);
+                
             }
             return new UnSubscriber(observers, observer);
         }

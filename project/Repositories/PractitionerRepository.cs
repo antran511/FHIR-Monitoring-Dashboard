@@ -19,6 +19,7 @@ namespace FHIR_FIT3077.Repository
         public Dictionary<string, PatientModel> GetPatient(string id)
         {
             InitializeClient();
+
             var patientList = new Dictionary<string, PatientModel>();
             Bundle result = _client.Search<Encounter>(new string[]
             {
@@ -30,35 +31,15 @@ namespace FHIR_FIT3077.Repository
                 var res = p.Subject.Reference;
                 var patientId = res.Split('/')[1];
                 var patientName = p.Subject.Display;
-                var patient = new PatientModel() {Name = patientName };
+                var patient = new PatientModel(){Name = patientName };
                 if (!patientList.ContainsKey(patientId))
                 {
                     patientList.Add(patientId, patient);
                 }
             }
-
             return(patientList);
-
         }
 
-        public Dictionary<string, PatientModel> AddPatient(string id, Dictionary<string, PatientModel> patientList, Dictionary<string, PatientModel> monitorList)
-        {
-            if (!monitorList.ContainsKey(id))
-            {
-                monitorList.Add(id, patientList[id]);
-            }
-            return (monitorList);
-        }
-
-        public Dictionary<string, PatientModel> RemovePatient(string id,
-            Dictionary<string, PatientModel> monitorList)
-        {
-            if (monitorList.ContainsKey(id))
-            {
-                monitorList.Remove(id);
-            }
-
-            return (monitorList);
-        }
+        
     }
 }
