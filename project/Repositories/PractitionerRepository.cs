@@ -24,44 +24,36 @@ namespace FHIR_FIT3077.Repository
             {
                 "participant.identifier=http://hl7.org/fhir/sid/us-npi|" + id.ToString()
             });
+
             foreach (var e in result.Entry)
             {
                 Encounter p = (Encounter) e.Resource;
                 var res = p.Subject.Reference;
                 var patientId = res.Split('/')[1];
                 var patientName = p.Subject.Display;
-                var patient = new PatientModel() { Id = patientId, Name = patientName };
+                var patient = new PatientModel() { Id = patientId, Name = patientName};
 
                 
                 if (!patientList.ContainsKey(patientId))
                 {
-                    patientList.Add(patientId, patient);
-                }
-            }
-
-            foreach (KeyValuePair<string, PatientModel> entry in patientList)
-            {
-                Bundle patientCholesterol = _client.Search<Observation>(new string[]
-                {
-                    "patient="+ $"{entry.Key}" +"&code=2093-3&_sort=date&_count=13"
-                });
-                try
-                {
-                    Console.WriteLine("code reach here");
-                    foreach (var o in patientCholesterol.Entry)
+                    var q = new SearchParams().Where("patient=" + patientId).Where("code=2093-3").OrderBy("-date");
+                    Bundle patientChol = _client.Search<Observation>(q);
+                    foreach (var entry in patientChol.Entry)
                     {
-                        Observation item = (Observation)o.Resource;
-                        var cholesterolVal = item.Value.ToString();
+                        Observation item = (Observation)entry.Resource;
+                        var cholesterol = ((Hl7.Fhir.Model.Quantity)item.Value).Value;
                         var date = item.Issued.ToString();
-                        var record = new RecordModel() { Cholesterol = cholesterolVal, Date = date };
-                        Console.WriteLine(cholesterolVal);
-                        Console.WriteLine(date + "\n");
-                        entry.Value.Records.Add(record);
+                        var record = new RecordModel() { Cholesterol = cholesterol.ToString(), Date = date };
+                        if (patient.Record == null)
+                        {
+                            patient.Record = record;
+                        }
+
                     }
-                }
-                catch
-                {
-                    Console.WriteLine("No patient has cholesterol");
+                    patientList.Add(patientId, patient);
+                    Console.WriteLine(patientId + " " + patientName);
+                    Console.WriteLine(patient.Record.Cholesterol);
+                    Console.WriteLine(patient.Record.Date + "\n");
                 }
             }
             

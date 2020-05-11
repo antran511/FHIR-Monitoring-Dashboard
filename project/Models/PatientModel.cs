@@ -11,7 +11,7 @@ namespace FHIR_FIT3077.Models
 
         public string Name { get; set; }
 
-        public List<RecordModel> Records { get; set; }
+        public RecordModel Record { get; set; }
 
     }
 }
