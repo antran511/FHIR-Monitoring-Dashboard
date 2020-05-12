@@ -7,7 +7,6 @@ using FHIR_FIT3077.IRepository;
 using FHIR_FIT3077.Models;
 using FHIR_FIT3077.Repository;
 using FHIR_FIT3077.ViewModel;
-using FHIR_FIT3077.ViewModels;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -20,6 +19,8 @@ namespace FHIR_FIT3077.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            _cache.Refresh("Monitor");
+            _cache.Refresh("Patient");
             return View();
         }
 

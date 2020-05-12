@@ -1,4 +1,4 @@
-﻿@model FHIR_FIT3077.ViewModels.MonitorViewModel
+﻿@model FHIR_FIT3077.ViewModel.PatientViewModel;
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -7,15 +7,23 @@
     <thead>
         <tr>
             <th>Name</th>
+            <th>Value</th>
+            <th>Date</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.MonitorList) {
-        <tr>
-            <td>
-                @item.Value.Name
-            </td>
-        </tr>
-}
+    @if (Model.MonitorList.Count > 0)
+    {
+        @foreach (var item in Model.MonitorList)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                    @item.Records[0].Value
+                    @item.Records[0].Date
+                </td>
+            </tr>
+        }
+    }
     </tbody>
 </table>

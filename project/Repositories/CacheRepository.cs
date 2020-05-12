@@ -42,5 +42,10 @@ namespace FHIR_FIT3077.Repositories
             } ;
             return value;
         }
+
+        public void Refresh(string key)
+        {
+            _distributedCache.Refresh(key);
+        }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using FHIR_FIT3077.IRepositories;
-using FHIR_FIT3077.IRepository;
 using FHIR_FIT3077.Models;
 using FHIR_FIT3077.Observer;
-using FHIR_FIT3077.ViewModels;
+using FHIR_FIT3077.ViewModel;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +14,10 @@ namespace FHIR_FIT3077.Controllers
     public class MonitorController : Controller
     {
         private ICacheRepository _cache;
-        private IMonitorRepository _monitor;
+       
 
-        public MonitorController(IMonitorRepository monitor, ICacheRepository distributedCache)
+        public MonitorController( ICacheRepository distributedCache)
         {
-            _monitor = monitor;
             _cache = distributedCache;
         }
 
@@ -26,13 +25,19 @@ namespace FHIR_FIT3077.Controllers
         [HttpPost]
         public IActionResult DeregisterPatient(string id)
         {
-            var monitorViewModel = new MonitorViewModel();
-            var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
-            monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
-            var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
-            monitorViewModel.MonitorList.Remove(monitorToRemove);
-            _cache.SetObject("Monitor", monitorViewModel.MonitorList);
-            return PartialView(monitorViewModel.MonitorList);
+            if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
+            {
+                var monitorViewModel = new PatientViewModel();
+                monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
+                var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
+                monitorViewModel.MonitorList.Remove(monitorToRemove);
+                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
+                return PartialView("_MonitorSection", monitorViewModel);
+            }
+            else
+            {
+                return null;
+            }
 
         }
 
@@ -40,10 +45,12 @@ namespace FHIR_FIT3077.Controllers
         [HttpPost]
         public IActionResult RegisterPatient(string id)
         {
-            var monitorViewModel = new MonitorViewModel();
-            var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
-            var monitor = new PatientMonitorModel(patientList[id]);
-            if (_cache.ExistObject<List<MonitorViewModel>>("Monitor") == true)
+            var monitorViewModel = new PatientViewModel();
+            var patientList = _cache.GetObject<Dictionary<string, PatientModel>>("Patients");
+            var monitor = new PatientMonitorModel();
+            monitor.Subscribe(patientList[id]);
+            monitor.OnNext(patientList[id]);
+            if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
             {
                 monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
                 monitorViewModel.MonitorList.Add(monitor);
@@ -51,11 +58,12 @@ namespace FHIR_FIT3077.Controllers
             }
             else
             {
+                monitorViewModel.MonitorList = new List<PatientMonitorModel>();
                 monitorViewModel.MonitorList.Add(monitor);
                 _cache.SetObject("Monitor", monitorViewModel.MonitorList);
 
             }
-            return PartialView(monitorViewModel.MonitorList);
+            return PartialView("_MonitorSection",monitorViewModel);
         }
     }
 }

@@ -11,12 +11,11 @@ namespace FHIR_FIT3077.Observer
     {
         public string Id { get; private set; }
         public String Name { get; private set; }
-        public IList<Measurement> Measurements { get; private set; }
+        public List<RecordModel> Records { get; private set; }
         private PatientModel _patient;
         private IDisposable _unsubscriber;
-        public PatientMonitorModel(IObservable<PatientModel> provider)
+        public PatientMonitorModel()
         {
-            _unsubscriber = provider.Subscribe(this);
         }
         public void Subscribe(IObservable<PatientModel> provider)
         {
@@ -42,7 +41,7 @@ namespace FHIR_FIT3077.Observer
         {
             this.Id = value.Id;
             this.Name = value.Name;
-            this.Measurements = value.Measurements;
+            this.Records = value.Records;
         }
 
        

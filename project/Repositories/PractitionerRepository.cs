@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FHIR_FIT3077.IRepository;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using FHIR_FIT3077.Models;
+using Hl7.Fhir.Support;
 
 namespace FHIR_FIT3077.Repository
 {
     public class PractitionerRepository : IPractitionerRepository
     {
         private static FhirClient _client;
+
         public static void InitializeClient()
         {
             _client = new FhirClient("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/");
@@ -25,55 +28,59 @@ namespace FHIR_FIT3077.Repository
             {
                 "participant.identifier=http://hl7.org/fhir/sid/us-npi|" + id.ToString()
             });
-
-            foreach (var e in result.Entry)
+            while (result != null)
             {
-                Encounter p = (Encounter) e.Resource;
-                var res = p.Subject.Reference;
-                var patientId = res.Split('/')[1];
-                var patientName = p.Subject.Display;
-                var patient = new PatientModel() { Id = patientId, Name = patientName };
->>>>>>> Repositories/PractitionerRepository.cs
-
-                
-                if (!patientList.ContainsKey(patientId))
+                foreach (var e in result.Entry)
                 {
-                    var q = new SearchParams().Where("patient=" + patientId).Where("code=2093-3").OrderBy("-date");
-                    Bundle patientChol = _client.Search<Observation>(q);
-                    foreach (var entry in patientChol.Entry)
+                    Encounter p = (Encounter)e.Resource;
+                    var res = p.Subject.Reference;
+                    var patientId = res.Split('/')[1];
+                    var patientName = p.Subject.Display;
+                    var patient = new PatientModel() { Id = patientId, Name = patientName };
+                    var record = GetRecordById(patientId);
+                    patient.Records = new List<RecordModel>();
+                    patient.Records.Add(record);
+                    if (!patientList.ContainsKey(patientId))
                     {
-                        Observation item = (Observation)entry.Resource;
-                        var cholesterol = ((Hl7.Fhir.Model.Quantity)item.Value).Value;
-                        var date = item.Issued.ToString();
-                        var record = new RecordModel() { Cholesterol = cholesterol.ToString(), Date = date };
-                        if (patient.Record == null)
-                        {
-                            patient.Record = record;
-                        }
-
+                        patientList.Add(patientId, patient);
                     }
-                    patientList.Add(patientId, patient);
-                    Console.WriteLine(patientId + " " + patientName);
-                    Console.WriteLine(patient.Record.Cholesterol);
-                    Console.WriteLine(patient.Record.Date + "\n");
                 }
+                result = _client.Continue(result);
             }
-<<<<<<< Repositories/PractitionerRepository.cs
             
-            return(patientList);
 
+            return (patientList);
         }
 
-        public Dictionary<string, PatientModel> RegisterPatient(string id, Dictionary<string, PatientModel> patientList, Dictionary<string, PatientModel> monitorList)
+        public RecordModel GetRecordById(string id)
         {
-            if (!monitorList.ContainsKey(id))
+            Bundle result = _client.Search<Observation>(new string[]
             {
-                monitorList.Add(id, patientList[id]);
+                "patient=" + $"{id}" + "&code=2093-3&_sort=date&_count=5"
+            });
+
+            if (result.Total > 0){
+                Bundle.EntryComponent e = (Bundle.EntryComponent)result.Entry[0];
+                Observation o = (Observation)e.Resource;
+                var date = o.Issued.ToFhirDateTime();
+                Quantity quantity = (Quantity)o.Value;
+                var weight = quantity.Value.ToString();
+                return new RecordModel()
+                {
+                    Name = RecordType.Cholesterol,
+                    Value = weight,
+                    Date = date
+                };
             }
             
-            return (monitorList);
-=======
->>>>>>> Repositories/PractitionerRepository.cs
+            return new RecordModel()
+                {
+                    Name = RecordType.Cholesterol,
+                    Value = 0.ToString()
+                };
+            
+            
         }
+    
     }
 }

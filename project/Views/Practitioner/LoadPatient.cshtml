@@ -1,58 +1,61 @@
 ﻿@using Hl7.Fhir.Model
 @using FHIR_FIT3077.ViewModel
-@using FHIR_FIT3077.ViewModels
 @model FHIR_FIT3077.ViewModel.PatientViewModel;
 @{
     ViewData["Title"] = "Patients";
 }
 <html>
 <body>
-    <h1>List</h1>
-    <form method="post">
-        <table class="table">
-            <tr>
-                <th>Id</th>
-                <th>Patient</th>
-                <th>Monitor</th>
-            </tr>
-            @foreach (var patient in Model.PatientList)
-            {
-                <tr>
-                    <td><p>@patient.Key</p></td>
-                    <td><p>@patient.Value.Name</p></td>
-                    <asp:CheckBox ID="DraftCheckBox" runat="server" Text="Save as Draft?" />
-                    <td><input type="checkbox" id="@patient.Key" onchange="checkChanged(@patient.Key)" /></td>
-                </tr>
-            }
-        </table>
-    </form>
+<h1>List</h1>
+<form method="post">
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Patient</th>
+            <th>Monitor</th>
+        </tr>
 
-    @*<div id="monitorView">
-        <partial name="_MonitorSection" for="PatientList" />
-    </div>*@
+        @foreach (var patient in Model.PatientList)
+        {
+            <tr>
+                <td><p>@patient.Key</p></td>
+                <td><p>@patient.Value.Name</p></td>
+                <asp:CheckBox ID="DraftCheckBox" runat="server" Text="Save as Draft?" />
+                <td><input type="checkbox" id="@patient.Key" onchange="checkChanged(@patient.Key)" data-toggle='toggle'/></td>
+            </tr>
+        }
+    </table>
+</form>
+
+    <div id="monitorView">
+        @if (Model.MonitorList != null && Model.MonitorList.Any())
+        {
+            <partial name="_MonitorSection" model="@Model" for="MonitorList"/>
+        }
+    </div>
 
 </body>
 </html>
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
     function checkChanged(id) {
         if ($('#' + id).is(":checked")) {
             $.ajax({
                 type: "POST",
-                url: "RegisterPatient",
+                url: '@Url.Action("RegisterPatient", "Monitor")',
                 data: { Id: id },
-                success: function (result) {
+                success: function(result) {
                     $("#monitorView").html(result);
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log(error);
                 }
-            })
+            });
         } else {
             $.ajax({
                 type: "POST",
-                url: "DeregisterPatient",
+                url: '@Url.Action("DeregisterPatient", "Monitor")',
                 data: { Id: id },
                 success: function (result) {
                     $("#monitorView").html(result);
