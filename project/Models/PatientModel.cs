@@ -10,8 +10,6 @@ namespace FHIR_FIT3077.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-
-<<<<<<< Models/PatientModel.cs
         public RecordModel Record { get; set; }
 
     }

@@ -10,9 +10,8 @@ namespace FHIR_FIT3077.Observer
     public class PatientMonitorModel : IObserver<PatientModel>
     {
         public string Id { get; private set; }
-        public String Name { get; private set; }
-        public List<RecordModel> Records { get; private set; }
-        private PatientModel _patient;
+        public string Name { get; private set; }
+        public RecordModel Record { get; private set; }
         private IDisposable _unsubscriber;
         public PatientMonitorModel()
         {
@@ -41,7 +40,7 @@ namespace FHIR_FIT3077.Observer
         {
             this.Id = value.Id;
             this.Name = value.Name;
-            this.Records = value.Records;
+            this.Record = value.Record;
         }
 
        

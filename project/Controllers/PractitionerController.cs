@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FHIR_FIT3077.IRepositories;
 using FHIR_FIT3077.IRepository;
 using FHIR_FIT3077.Models;
+using FHIR_FIT3077.Observer;
 using FHIR_FIT3077.Repository;
 using FHIR_FIT3077.ViewModel;
 using Hl7.Fhir.Model;
@@ -79,10 +80,13 @@ namespace FHIR_FIT3077.Controllers
         [HttpPost]
         public IActionResult RegisterPatient(string id)
         {
-            var monitorModel = new MonitorViewModel();
-            if (_cache.ExistObject<List<PatientModel>>("Monitor") == true)
+            var monitorModel = new PatientViewModel();
+            if (_cache.ExistObject<List<PatientMonitorModel>>("Monitor") == true)
             {
-                monitorModel.MonitorList = _cache.GetObject<Dictionary<string, PatientModel>>("Monitor");
+                monitorModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
+                var totalPatientList = _cache.GetObject<Dictionary<string, PatientModel>>("Patient");
+                var patient = totalPatientList[id];
+                //monitorModel.MonitorList.Add(patient);
             }
             else
             {
