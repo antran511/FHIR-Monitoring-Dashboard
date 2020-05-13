@@ -7,21 +7,38 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Value</th>
+            <th>Total Cholesterol</th>
             <th>Date</th>
         </tr>
     </thead>
     <tbody>
         @if (Model.MonitorList.Count > 0)
         {
+            var max = Convert.ToDouble(ViewData["max"]);
             @foreach (var item in Model.MonitorList)
             {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Records[0].Value</td>
-                    <td>@item.Records[0].Date</td>
-                </tr>
+                var value = Convert.ToDouble(item.Records[0].Value);
+                if (value == max && Model.MonitorList.Count > 1)
+                {
+                    <tr>
+                        <td><span style="color:red">@item.Name</span></td>
+                        <td><span style="color:red">@item.Records[0].Value</span></td>
+                        <td><span style="color:red">@item.Records[0].Date</span></td>
+                    </tr>
+
+                }
+                else
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Records[0].Value</td>
+                        <td>@item.Records[0].Date</td>
+                    </tr>
+                }
+
+
             }
+
         }
     </tbody>
 </table>

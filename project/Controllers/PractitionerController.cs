@@ -51,18 +51,22 @@ namespace FHIR_FIT3077.Controllers
         public IActionResult LoadPatient(string id)
         {
             
-            if (_cache.ExistObject<Dictionary<string, PatientModel>>("Patients"))
-            {
-                var patientViewModel = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
-                return View(patientViewModel);
-            }
-            else
-            {
-                var patientViewModel = _practitioner.GetTotalPatients(id);
-                _cache.SetObject("Patients", patientViewModel.PatientList);
-                return View(patientViewModel.PatientList);
-            }
-            
+            //if (_cache.ExistObject<Dictionary<string, PatientModel>>("Patients") == true)
+            //{
+            //    var patientViewModel = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
+            //    Console.WriteLine(_cache.ExistObject<Dictionary<string, PatientModel>>("Patient").ToString());
+            //    return View(patientViewModel);
+            //}
+            //else
+            //{
+            //    var patientViewModel = _practitioner.GetTotalPatients(id);
+            //    _cache.SetObject("Patients", patientViewModel.PatientList);
+            //    return View(patientViewModel.PatientList);
+            //}
+
+            var patientViewModel = _practitioner.GetTotalPatients(id);
+            _cache.SetObject("Patients", patientViewModel.PatientList);
+            return View(patientViewModel);
         }
         
     }

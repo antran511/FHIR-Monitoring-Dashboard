@@ -49,7 +49,7 @@ namespace FHIR_FIT3077.Repository
 
 
             patientViewModel.PatientList = patientList;
-            return (patientViewModel);
+            return patientViewModel;
         }
 
         public RecordModel GetCholesterolRecordById(string id)

@@ -15,7 +15,7 @@
             <th>Monitor</th>
         </tr>
 
-        @foreach (var patient in Model.PatientList)
+        @foreach (KeyValuePair<string, PatientModel> patient in Model.PatientList)
         {
             <tr>
                 <td><p>@patient.Key</p></td>
@@ -26,6 +26,8 @@
         }
     </table>
 </form>
+
+<h2>Monitor</h2>
 
     <div id="monitorView">
         @if (Model.MonitorList != null && Model.MonitorList.Any())
