@@ -6,6 +6,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using FHIR_FIT3077.Models;
 using Hl7.Fhir.Support;
+using FHIR_FIT3077.ViewModel;
 
 namespace FHIR_FIT3077.Repository
 {
@@ -19,10 +20,11 @@ namespace FHIR_FIT3077.Repository
             _client.Timeout = 120000;
         }
 
-        public Dictionary<string, PatientModel> GetTotalPatients(string id)
+        public PatientViewModel GetTotalPatients(string id)
         {
             InitializeClient();
 
+            var patientViewModel = new PatientViewModel();
             var patientList = new Dictionary<string, PatientModel>();
             Bundle result = _client.Search<Encounter>(new string[]
             {
@@ -35,22 +37,22 @@ namespace FHIR_FIT3077.Repository
                     var res = p.Subject.Reference;
                     var patientId = res.Split('/')[1];
                     var patientName = p.Subject.Display;
-                    var patient = new PatientModel() { Id = patientId, Name = patientName };
+                    var patient = new PatientModel() { Id = patientId, Name = patientName, Records = new List<RecordModel>() };
 
                     if (!patientList.ContainsKey(patientId))
                     {
-                        var record = GetRecordById(patientId);
-                        patient.Record = record;
+                        var record = GetCholesterolRecordById(patientId);
+                        patient.Records.Add(record);
                         patientList.Add(patientId, patient);
                     }
                 }
-            
-            
 
-            return (patientList);
+
+            patientViewModel.PatientList = patientList;
+            return (patientViewModel);
         }
 
-        public RecordModel GetRecordById(string id)
+        public RecordModel GetCholesterolRecordById(string id)
         {
             var q = new SearchParams().Where("patient=" + id).Where("code=2093-3").OrderBy("-date");
             Bundle result = _client.Search<Observation>(q);

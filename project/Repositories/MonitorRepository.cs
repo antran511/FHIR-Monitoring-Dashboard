@@ -23,7 +23,7 @@ namespace FHIR_FIT3077.Repositories
             if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
             {
                 var monitorViewModel = new PatientViewModel();
-                monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
+                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>("Monitor");
                 var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
                 monitorViewModel.MonitorList.Remove(monitorToRemove);
                 _cache.SetObject("Monitor", monitorViewModel.MonitorList);
@@ -40,18 +40,18 @@ namespace FHIR_FIT3077.Repositories
         {
             var monitorViewModel = new PatientViewModel();
             var patientList = _cache.GetObject<Dictionary<string, PatientModel>>("Patients");
-            var monitor = new PatientMonitorModel();
+            var monitor = new MonitorModel();
             monitor.Subscribe(patientList[id]);
             monitor.OnNext(patientList[id]);
             if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
             {
-                monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
+                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>("Monitor");
                 monitorViewModel.MonitorList.Add(monitor);
                 _cache.SetObject("Monitor", monitorViewModel.MonitorList);
             }
             else
             {
-                monitorViewModel.MonitorList = new List<PatientMonitorModel>();
+                monitorViewModel.MonitorList = new List<MonitorModel>();
                 monitorViewModel.MonitorList.Add(monitor);
                 _cache.SetObject("Monitor", monitorViewModel.MonitorList);
 

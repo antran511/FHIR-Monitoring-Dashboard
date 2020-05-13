@@ -11,7 +11,6 @@ using FHIR_FIT3077.ViewModel;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
 
 namespace FHIR_FIT3077.Controllers
 {
@@ -51,17 +50,19 @@ namespace FHIR_FIT3077.Controllers
         //This method load all unique patients from the server and store the list in cache
         public IActionResult LoadPatient(string id)
         {
-            var patientModel = new PatientViewModel();
-            if (_cache.ExistObject<Dictionary<string, PatientModel>>(id.ToString()) == true)
+            
+            if (_cache.ExistObject<Dictionary<string, PatientModel>>("Patients"))
             {
-                var patientsFromCache = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
+                var patientViewModel = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
+                return View(patientViewModel);
             }
             else
             {
-                patientModel.PatientList = _practitioner.GetTotalPatients(id);
-                _cache.SetObject("Patients", patientModel.PatientList);
+                var patientViewModel = _practitioner.GetTotalPatients(id);
+                _cache.SetObject("Patients", patientViewModel.PatientList);
+                return View(patientViewModel.PatientList);
             }
-            return View(patientModel);
+            
         }
         
     }

@@ -30,7 +30,7 @@ namespace FHIR_FIT3077.Controllers
             return PartialView("_MonitorSection", monitorViewModel);
         }
 
-        //This method deregisters a patient from the monitor list stored in cache by id
+        //This method register a monitor of patient into monitor list
         [HttpPost]
         public IActionResult RegisterPatient(string id)
         {
