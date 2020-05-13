@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using FHIR_FIT3077.IRepositories;
 using FHIR_FIT3077.Models;
 using FHIR_FIT3077.Observer;
+using FHIR_FIT3077.Repositories;
 using FHIR_FIT3077.ViewModel;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ namespace FHIR_FIT3077.Controllers
     public class MonitorController : Controller
     {
         private ICacheRepository _cache;
-       
+        private IMonitorRepository _monitor;
 
         public MonitorController( ICacheRepository distributedCache)
         {
@@ -45,27 +46,8 @@ namespace FHIR_FIT3077.Controllers
         [HttpPost]
         public IActionResult RegisterPatient(string id)
         {
-            var monitorViewModel = new PatientViewModel();
-            var patientList = _cache.GetObject<Dictionary<string, PatientModel>>("Patients");
-            var monitor = new MonitorModel();
-            //Subscibe to patient and initialize existing data to the monitor
-            monitor.Subscribe(patientList[id]);
-            monitor.OnNext(patientList[id]);
-            //If "Monitor" exist in cache memory
-            if (_cache.ExistObject<List<MonitorModel>>("MonitorList") == true)
-            {
-                var monitorList = _cache.GetObject<List<MonitorModel>>("MonitorList");
-                monitorViewModel.MonitorList = monitorList;
-                monitorViewModel.MonitorList.Add(monitor);
-                _cache.SetObject("MonitorList", monitorViewModel.MonitorList);
-            }
-            else
-            {
-                monitorViewModel.MonitorList = new List<MonitorModel>();
-                monitorViewModel.MonitorList.Add(monitor);
-                _cache.SetObject("MonitorList", monitorViewModel.MonitorList);
-
-            }
+            var monitorViewModel = _monitor.RegisterPatient(id);
+            
             return PartialView("_MonitorSection",monitorViewModel);
         }
     }

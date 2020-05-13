@@ -36,11 +36,11 @@ namespace FHIR_FIT3077.Repository
                     var patientId = res.Split('/')[1];
                     var patientName = p.Subject.Display;
                     var patient = new PatientModel() { Id = patientId, Name = patientName };
-                    var record = GetRecordById(patientId);
-                    patient.Records = new List<RecordModel>();
-                    patient.Records.Add(record);
+
                     if (!patientList.ContainsKey(patientId))
                     {
+                        var record = GetRecordById(patientId);
+                        patient.Record = record;
                         patientList.Add(patientId, patient);
                     }
                 }
@@ -52,10 +52,8 @@ namespace FHIR_FIT3077.Repository
 
         public RecordModel GetRecordById(string id)
         {
-            Bundle result = _client.Search<Observation>(new string[]
-            {
-                "patient=" + $"{id}" + "&code=2093-3&_sort=date&_count=5"
-            });
+            var q = new SearchParams().Where("patient=" + id).Where("code=2093-3").OrderBy("-date");
+            Bundle result = _client.Search<Observation>(q);
 
             if (result.Total > 0){
                 Bundle.EntryComponent e = (Bundle.EntryComponent)result.Entry[0];

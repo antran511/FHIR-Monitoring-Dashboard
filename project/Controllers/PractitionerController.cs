@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FHIR_FIT3077.IRepositories;
 using FHIR_FIT3077.IRepository;
 using FHIR_FIT3077.Models;
+using FHIR_FIT3077.Observer;
 using FHIR_FIT3077.Repository;
 using FHIR_FIT3077.ViewModel;
 using Hl7.Fhir.Model;
