@@ -28,8 +28,7 @@ namespace FHIR_FIT3077.Repository
             {
                 "participant.identifier=http://hl7.org/fhir/sid/us-npi|" + id.ToString()
             });
-            while (result != null)
-            {
+            
                 foreach (var e in result.Entry)
                 {
                     Encounter p = (Encounter)e.Resource;
@@ -45,8 +44,7 @@ namespace FHIR_FIT3077.Repository
                         patientList.Add(patientId, patient);
                     }
                 }
-                result = _client.Continue(result);
-            }
+            
             
 
             return (patientList);

@@ -16,6 +16,7 @@ namespace FHIR_FIT3077.Models
 
     public enum RecordType
     {
-        Cholesterol
+        Cholesterol 
+
     }
 }
