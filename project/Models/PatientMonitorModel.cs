@@ -9,9 +9,9 @@ namespace FHIR_FIT3077.Observer
 {
     public class PatientMonitorModel : IObserver<PatientModel>
     {
-        public string Id { get; private set; }
-        public string Name { get; private set; }
-        public RecordModel Record { get; private set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public RecordModel Record { get; set; }
         private IDisposable _unsubscriber;
         public PatientMonitorModel()
         {

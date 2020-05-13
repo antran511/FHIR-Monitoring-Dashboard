@@ -26,20 +26,8 @@ namespace FHIR_FIT3077.Controllers
         [HttpPost]
         public IActionResult DeregisterPatient(string id)
         {
-            if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
-            {
-                var monitorViewModel = new PatientViewModel();
-                monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
-                var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
-                monitorViewModel.MonitorList.Remove(monitorToRemove);
-                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
-                return PartialView("_MonitorSection", monitorViewModel);
-            }
-            else
-            {
-                return null;
-            }
-
+            var monitorViewModel = _monitor.DeregisterPatient(id);
+            return PartialView("_MonitorSection", monitorViewModel);
         }
 
         //This method deregisters a patient from the monitor list stored in cache by id

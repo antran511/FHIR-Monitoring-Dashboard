@@ -11,7 +11,7 @@ namespace FHIR_FIT3077.Repositories
 {
     public class MonitorRepository : IMonitorRepository
     {
-        private ICacheRepository _cache;
+        private readonly ICacheRepository _cache;
 
         public MonitorRepository(ICacheRepository distributedCache)
         {
@@ -20,7 +20,20 @@ namespace FHIR_FIT3077.Repositories
 
         public PatientViewModel DeregisterPatient(string id)
         {
-            throw new NotImplementedException();
+            if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
+            {
+                var monitorViewModel = new PatientViewModel();
+                monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
+                var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
+                monitorViewModel.MonitorList.Remove(monitorToRemove);
+                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
+                return monitorViewModel;
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         public PatientViewModel RegisterPatient(string id)
