@@ -25,13 +25,13 @@ namespace FHIR_FIT3077.Controllers
         [HttpPost]
         public IActionResult DeregisterPatient(string id)
         {
-            if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
+            if (_cache.ExistObject<List<MonitorModel>>("MonitorList") == true)
             {
                 var monitorViewModel = new PatientViewModel();
-                monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
+                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>("MonitorList");
                 var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
                 monitorViewModel.MonitorList.Remove(monitorToRemove);
-                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
+                _cache.SetObject("MonitorList", monitorViewModel.MonitorList);
                 return PartialView("_MonitorSection", monitorViewModel);
             }
             else
@@ -41,26 +41,29 @@ namespace FHIR_FIT3077.Controllers
 
         }
 
-        //This method deregisters a patient from the monitor list stored in cache by id
+        //This method register a monitor of patient into monitor list
         [HttpPost]
         public IActionResult RegisterPatient(string id)
         {
             var monitorViewModel = new PatientViewModel();
             var patientList = _cache.GetObject<Dictionary<string, PatientModel>>("Patients");
-            var monitor = new PatientMonitorModel();
+            var monitor = new MonitorModel();
+            //Subscibe to patient and initialize existing data to the monitor
             monitor.Subscribe(patientList[id]);
             monitor.OnNext(patientList[id]);
-            if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
+            //If "Monitor" exist in cache memory
+            if (_cache.ExistObject<List<MonitorModel>>("MonitorList") == true)
             {
-                monitorViewModel.MonitorList = _cache.GetObject<List<PatientMonitorModel>>("Monitor");
+                var monitorList = _cache.GetObject<List<MonitorModel>>("MonitorList");
+                monitorViewModel.MonitorList = monitorList;
                 monitorViewModel.MonitorList.Add(monitor);
-                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
+                _cache.SetObject("MonitorList", monitorViewModel.MonitorList);
             }
             else
             {
-                monitorViewModel.MonitorList = new List<PatientMonitorModel>();
+                monitorViewModel.MonitorList = new List<MonitorModel>();
                 monitorViewModel.MonitorList.Add(monitor);
-                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
+                _cache.SetObject("MonitorList", monitorViewModel.MonitorList);
 
             }
             return PartialView("_MonitorSection",monitorViewModel);

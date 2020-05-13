@@ -4,19 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using FHIR_FIT3077.Models;
 using Hl7.Fhir.Model;
+using Newtonsoft.Json;
 
 namespace FHIR_FIT3077.Observer
 {
-    public class PatientMonitorModel : IObserver<PatientModel>
+    [Serializable()]
+    public class MonitorModel : IObserver<PatientModel>
     {
+        //JsonProperty added for deserialization of private field
+        [JsonProperty]
         public string Id { get; private set; }
-        public String Name { get; private set; }
+        [JsonProperty]
+        public string Name { get; private set; }
+        [JsonProperty]
         public List<RecordModel> Records { get; private set; }
-        private PatientModel _patient;
+        [JsonIgnore]
         private IDisposable _unsubscriber;
-        public PatientMonitorModel()
-        {
-        }
+       
         public void Subscribe(IObservable<PatientModel> provider)
         {
             _unsubscriber ??= provider.Subscribe(this);

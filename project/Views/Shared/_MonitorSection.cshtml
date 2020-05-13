@@ -12,18 +12,16 @@
         </tr>
     </thead>
     <tbody>
-    @if (Model.MonitorList.Count > 0)
-    {
-        @foreach (var item in Model.MonitorList)
+        @if (Model.MonitorList.Count > 0)
         {
-            <tr>
-                <td>
-                    @item.Name
-                    @item.Records[0].Value
-                    @item.Records[0].Date
-                </td>
-            </tr>
+            @foreach (var item in Model.MonitorList)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Records[0].Value</td>
+                    <td>@item.Records[0].Date</td>
+                </tr>
+            }
         }
-    }
     </tbody>
 </table>
