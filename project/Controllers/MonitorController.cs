@@ -57,8 +57,23 @@ namespace FHIR_FIT3077.Controllers
             monitor.OnNext(patientList[id]);
             if (_cache.ExistObject<List<PatientViewModel>>(cacheMonitorKey) == true)
             {
-                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
-                monitorViewModel.MonitorList.Add(monitor);
+                var monitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
+
+                bool notExist = true;
+                for (int i = 0; i < monitorList.Count; i++)
+                {
+                    if (monitorList[i].Id == monitor.Id)
+                    {
+                        monitorList[i] = monitor;
+                        notExist = false;
+                    }
+                }
+                if (notExist)
+                {
+                    monitorList.Add(monitor);
+                }
+                
+                monitorViewModel.MonitorList = monitorList;
                 _cache.SetObject(cacheMonitorKey, monitorViewModel.MonitorList);
             }
             else
