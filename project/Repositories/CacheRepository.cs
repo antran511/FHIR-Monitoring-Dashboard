@@ -32,7 +32,8 @@ namespace FHIR_FIT3077.Repositories
         public bool ExistObject<T>(string key)
         {
             bool value;
-            if (string.IsNullOrEmpty(_distributedCache.GetString(key)))
+            var obj = GetObject<T>(key);
+            if (string.IsNullOrEmpty(_distributedCache.GetString(key)) || obj == null)
             {
                 value = false;
             }

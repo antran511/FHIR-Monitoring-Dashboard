@@ -39,7 +39,8 @@ namespace FHIR_FIT3077.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                _cache.Refresh("Monitor" + model.Id);
+                _cache.Refresh("Patient" + model.Id);
                 return RedirectToAction("LoadPatient", new {id = model.Id});
             }
 
@@ -50,23 +51,28 @@ namespace FHIR_FIT3077.Controllers
         //This method load all unique patients from the server and store the list in cache
         public IActionResult LoadPatient(string id)
         {
-            
-            //if (_cache.ExistObject<Dictionary<string, PatientModel>>("Patients") == true)
-            //{
-            //    var patientViewModel = _cache.GetObject<Dictionary<string, PatientModel>>(id.ToString());
-            //    Console.WriteLine(_cache.ExistObject<Dictionary<string, PatientModel>>("Patient").ToString());
-            //    return View(patientViewModel);
-            //}
-            //else
-            //{
-            //    var patientViewModel = _practitioner.GetTotalPatients(id);
-            //    _cache.SetObject("Patients", patientViewModel.PatientList);
-            //    return View(patientViewModel.PatientList);
-            //}
-
-            var patientViewModel = _practitioner.GetTotalPatients(id);
-            _cache.SetObject("Patients", patientViewModel.PatientList);
-            return View(patientViewModel);
+            string cacheKey = "Patients" + id;
+            if (_cache.ExistObject<Dictionary<string, PatientModel>>(cacheKey) == true)
+            {
+                Console.WriteLine("Code goes here");
+                var patientViewModel = new PatientViewModel();
+                var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(cacheKey);
+                patientViewModel.PatientList = patientList;
+                ViewData["PractitionerId"] = id;
+                return View(patientViewModel);
+            }
+            else
+            {
+                Console.WriteLine("Code there here");
+                var patientViewModel = _practitioner.GetTotalPatients(id);
+                _cache.SetObject(cacheKey, patientViewModel.PatientList);
+                ViewData["PractitionerId"] = id;
+                return View(patientViewModel);
+            }
+            //var patientViewModel = _practitioner.GetTotalPatients(id);
+            //_cache.SetObject(cacheKey, patientViewModel.PatientList);
+            //ViewData["PractitionerId"] = id;
+            //return View(patientViewModel);
         }
         
     }

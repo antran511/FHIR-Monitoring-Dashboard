@@ -14,20 +14,24 @@
     <tbody>
         @if (Model.MonitorList.Count > 0)
         {
-            var max = Convert.ToDouble(ViewData["max"]);
             @foreach (var item in Model.MonitorList)
             {
-                var value = Convert.ToDouble(item.Records[0].Value);
-                if (value == max && Model.MonitorList.Count > 1)
+                bool renderedFlag = false;
+                @foreach (var cholVal in (List<double>)ViewData["max"])
                 {
-                    <tr>
-                        <td><span style="color:red">@item.Name</span></td>
-                        <td><span style="color:red">@item.Records[0].Value</span></td>
-                        <td><span style="color:red">@item.Records[0].Date</span></td>
-                    </tr>
-
+                    
+                    var value = Convert.ToDouble(item.Records[0].Value);
+                    if (value == cholVal && Model.MonitorList.Count > 1)
+                    {
+                        <tr>
+                            <td><span style="color:red">@item.Name</span></td>
+                            <td><span style="color:red">@item.Records[0].Value</span></td>
+                            <td><span style="color:red">@item.Records[0].Date</span></td>
+                        </tr>
+                        renderedFlag = true;
+                    }
                 }
-                else
+                if(!renderedFlag)
                 {
                     <tr>
                         <td>@item.Name</td>

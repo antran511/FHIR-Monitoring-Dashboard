@@ -22,17 +22,18 @@ namespace FHIR_FIT3077.Controllers
 
         //This method registers a patient from the monitor list stored in cache by id
         [HttpPost]
-        public IActionResult DeregisterPatient(string id)
+        public IActionResult DeregisterPatient(string id, string pracId)
         {
-            if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
+            string cacheMonitorKey = "Monitor" + pracId;
+            if (_cache.ExistObject<List<PatientViewModel>>(cacheMonitorKey) == true)
             {
                 var monitorViewModel = new PatientViewModel();
-                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>("Monitor");
+                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
                 var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
                 monitorViewModel.MonitorList.Remove(monitorToRemove);
-                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
+                _cache.SetObject(cacheMonitorKey, monitorViewModel.MonitorList);
 
-                var max = GetMaxCholesterol(monitorViewModel.MonitorList);
+                var max = GetHighCholesterol(monitorViewModel.MonitorList);
                 ViewData["max"] = max;
                 return PartialView("_MonitorSection", monitorViewModel);
             }
@@ -45,18 +46,20 @@ namespace FHIR_FIT3077.Controllers
 
         //This method register a monitor of patient into monitor list
         [HttpPost]
-        public IActionResult RegisterPatient(string id)
+        public IActionResult RegisterPatient(string id, string pracId)
         {
+            string cachePatientKey = "Patients" + pracId;
+            string cacheMonitorKey = "Monitor" + pracId;
             var monitorViewModel = new PatientViewModel();
-            var patientList = _cache.GetObject<Dictionary<string, PatientModel>>("Patients");
+            var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(cachePatientKey);
             var monitor = new MonitorModel();
             monitor.Subscribe(patientList[id]);
             monitor.OnNext(patientList[id]);
-            if (_cache.ExistObject<List<PatientViewModel>>("Monitor") == true)
+            if (_cache.ExistObject<List<PatientViewModel>>(cacheMonitorKey) == true)
             {
-                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>("Monitor");
+                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
                 monitorViewModel.MonitorList.Add(monitor);
-                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
+                _cache.SetObject(cacheMonitorKey, monitorViewModel.MonitorList);
             }
             else
             {
@@ -64,26 +67,34 @@ namespace FHIR_FIT3077.Controllers
                 {
                     monitor
                 };
-                _cache.SetObject("Monitor", monitorViewModel.MonitorList);
+                _cache.SetObject(cacheMonitorKey, monitorViewModel.MonitorList);
 
             }
-            var max = GetMaxCholesterol(monitorViewModel.MonitorList);
+            var max = GetHighCholesterol(monitorViewModel.MonitorList);
             ViewData["max"] = max;
             return PartialView("_MonitorSection",monitorViewModel);
         }
 
-        public double GetMaxCholesterol(List<MonitorModel> monitorList)
+        public List<double> GetHighCholesterol(List<MonitorModel> monitorList)
         {
-            double max = 0.0;
+            double totalChol = 0.0;
+            double averageChol;
+            List<double> highCholVal = new List<double>();
             for (int i = 0; i < monitorList.Count; i++)
             {
                 var value = Convert.ToDouble(monitorList[i].Records[0].Value);
-                if ( value > max)
+                totalChol += value;
+            }
+            averageChol = totalChol / monitorList.Count;
+            for (int j = 0; j < monitorList.Count; j++)
+            {
+                var value = Convert.ToDouble(monitorList[j].Records[0].Value);
+                if (value > averageChol)
                 {
-                    max = value;
+                    highCholVal.Add(value);
                 }
             }
-            return max; 
+            return highCholVal; 
         }
     }
 }
