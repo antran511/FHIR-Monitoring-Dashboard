@@ -43,13 +43,49 @@ namespace FHIR_FIT3077.Repository
                     {
                         var record = GetCholesterolRecordById(patientId);
                         patient.Records.Add(record);
-                        patientList.Add(patientId, patient);
+                        GetPatientDetails(patient);
+                    Console.WriteLine(patient.Birthdate);
+                    Console.WriteLine(patient.Gender);
+                    Console.WriteLine(patient.Address);
+                    Console.WriteLine(patient.City);
+                    Console.WriteLine(patient.State);
+                    Console.WriteLine(patient.Country);
+                    patientList.Add(patientId, patient);
                     }
                 }
 
 
             patientViewModel.PatientList = patientList;
             return patientViewModel;
+        }
+        
+        public PatientModel GetPatientDetails(PatientModel patient)
+        {
+            var patientId = patient.Id;
+            var q = new SearchParams().Where("_id=" + patientId);
+            Bundle result = _client.Search<Patient>(q);
+            if(result.Total > 0)
+            {
+                Bundle.EntryComponent e = (Bundle.EntryComponent)result.Entry[0];
+                Patient p = (Patient)e.Resource;
+                var birthdate = p.BirthDate;
+                var gender = p.Gender;
+                var listAdr = p.Address;
+                var adr = listAdr[0];
+                var address = ((adr.Line).ToList())[0];
+                var city = adr.City;
+                var state = adr.State;
+                var country = adr.Country;
+                
+                patient.Birthdate = birthdate;
+                patient.Gender = gender;
+                patient.Address = address;
+                patient.City = city;
+                patient.State = state;
+                patient.Country = country;
+                return patient;
+            }
+            return patient;
         }
 
         public RecordModel GetCholesterolRecordById(string id)

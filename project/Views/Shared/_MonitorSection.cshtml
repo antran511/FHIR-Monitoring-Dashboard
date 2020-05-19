@@ -24,9 +24,9 @@
                     if (value == cholVal && Model.MonitorList.Count > 1)
                     {
                         <tr>
-                            <td><span style="color:red">@item.Name</span></td>
-                            <td><span style="color:red">@item.Records[0].Value</span></td>
-                            <td><span style="color:red">@item.Records[0].Date</span></td>
+                            <td onclick="myClick()"><span style="color:red">@item.Name</span></td>
+                            <td onclick="myClick()"><span style="color:red">@item.Records[0].Value</span></td>
+                            <td onclick="myClick()"><span style="color:red">@item.Records[0].Date</span></td>
                         </tr>
                         renderedFlag = true;
                     }
@@ -34,9 +34,9 @@
                 if(!renderedFlag)
                 {
                     <tr>
-                        <td>@item.Name</td>
-                        <td>@item.Records[0].Value</td>
-                        <td>@item.Records[0].Date</td>
+                        <td onclick="myClick()">@item.Name</td>
+                        <td onclick="myClick()">@item.Records[0].Value</td>
+                        <td onclick="myClick()">@item.Records[0].Date</td>
                     </tr>
                 }
 
@@ -46,3 +46,9 @@
         }
     </tbody>
 </table>
+
+<script>
+    function myClick() {
+        console.log("clicked");
+    }
+</script>
