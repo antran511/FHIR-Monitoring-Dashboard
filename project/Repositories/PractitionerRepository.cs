@@ -44,13 +44,7 @@ namespace FHIR_FIT3077.Repository
                         var record = GetCholesterolRecordById(patientId);
                         patient.Records.Add(record);
                         GetPatientDetails(patient);
-                    Console.WriteLine(patient.Birthdate);
-                    Console.WriteLine(patient.Gender);
-                    Console.WriteLine(patient.Address);
-                    Console.WriteLine(patient.City);
-                    Console.WriteLine(patient.State);
-                    Console.WriteLine(patient.Country);
-                    patientList.Add(patientId, patient);
+                        patientList.Add(patientId, patient);
                     }
                 }
 
