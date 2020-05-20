@@ -3,21 +3,17 @@
 @model FHIR_FIT3077.ViewModel.PatientViewModel;
 @{
     ViewData["Title"] = "Patients";
+    string pracId = (string)ViewData["PractitionerId"];
 }
 <html>
 <body>
-    <div style="display:flex; flex-direction: row">
+    
         <h1>List</h1>
-        @*@using (Html.BeginForm("", "Practitioner", FormMethod.Post))
-            {
-                @Html.TextBoxFor(m => m.Id)
-                @Html.ValidationMessageFor(m => m.Id)
-                <button type="submit" value="Submit">Submit</button>
-            }*@
-    </div>
-
+     
+    
+<div style="display:flex; flex-direction: row" id="patientView">
     <form method="post">
-        <table class="table">
+        <table class="table" >
             <tr>
                 <th>Id</th>
                 <th>Patient</th>
@@ -35,7 +31,7 @@
             }
         </table>
     </form>
-
+</div>
     <h2>Monitor</h2>
 
     <div id="monitorView">
@@ -48,10 +44,14 @@
 </body>
 </html>
 
-@{ string pracId = (string)ViewData["PractitionerId"];}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
+    window.setInterval(function() {
+        $.post('@Url.Action("someaction", "somecontroller")', function(result) {
+            $('#results').html(result);
+        });
+    }, 5000);
     function checkChanged(id) {
         if ($('#' + id).is(":checked")) {
             $.ajax({

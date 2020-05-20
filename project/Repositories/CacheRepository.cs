@@ -44,9 +44,9 @@ namespace FHIR_FIT3077.Repositories
             return value;
         }
 
-        public void Refresh(string key)
+        public void Remove(string key)
         {
-            _distributedCache.Refresh(key);
+            _distributedCache.Remove(key);
         }
     }
 }

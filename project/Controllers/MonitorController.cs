@@ -25,23 +25,16 @@ namespace FHIR_FIT3077.Controllers
         public IActionResult DeregisterPatient(string id, string pracId)
         {
             string cacheMonitorKey = "Monitor" + pracId;
-            if (_cache.ExistObject<List<PatientViewModel>>(cacheMonitorKey) == true)
-            {
-                var monitorViewModel = new PatientViewModel();
-                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
-                var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
-                monitorViewModel.MonitorList.Remove(monitorToRemove);
-                _cache.SetObject(cacheMonitorKey, monitorViewModel.MonitorList);
+            var monitorViewModel = new PatientViewModel();
+            monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
+            var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
+            monitorViewModel.MonitorList.Remove(monitorToRemove);
+            _cache.SetObject(cacheMonitorKey, monitorViewModel.MonitorList);
 
-                var max = GetHighCholesterol(monitorViewModel.MonitorList);
-                ViewData["max"] = max;
-                return PartialView("_MonitorSection", monitorViewModel);
-            }
-            else
-            {
-                return null;
-            }
-            
+            var max = GetHighCholesterol(monitorViewModel.MonitorList);
+            ViewData["max"] = max;
+            return PartialView("_MonitorSection", monitorViewModel);
+
         }
 
         //This method register a monitor of patient into monitor list

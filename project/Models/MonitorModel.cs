@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace FHIR_FIT3077.Observer
 {
     [Serializable()]
-    public class MonitorModel : IObserver<PatientModel>
+    public class MonitorModel : Observer
     {
         //JsonProperty added for deserialization of private field
         [JsonProperty]
@@ -18,30 +18,8 @@ namespace FHIR_FIT3077.Observer
         public string Name { get; private set; }
         [JsonProperty]
         public List<RecordModel> Records { get; private set; }
-        [JsonIgnore]
-        private IDisposable _unsubscriber;
-       
-        public void Subscribe(IObservable<PatientModel> provider)
-        {
-            _unsubscriber ??= provider.Subscribe(this);
-        }
-       
 
-        public void Unsubscribe()
-        {
-            _unsubscriber.Dispose();
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-        }
-
-        public void OnNext(PatientModel value)
+        public new void OnNext(PatientModel value)
         {
             this.Id = value.Id;
             this.Name = value.Name;

@@ -19,8 +19,6 @@ namespace FHIR_FIT3077.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            _cache.Refresh("Monitor");
-            _cache.Refresh("Patient");
             return View();
         }
 
@@ -39,8 +37,8 @@ namespace FHIR_FIT3077.Controllers
         {
             if (ModelState.IsValid)
             {
-                _cache.Refresh("Monitor" + model.Id);
-                _cache.Refresh("Patient" + model.Id);
+                _cache.Remove("Patient" + model.Id);
+                _cache.Remove("Monitor" + model.Id);
                 return RedirectToAction("LoadPatient", new {id = model.Id});
             }
 
@@ -69,6 +67,13 @@ namespace FHIR_FIT3077.Controllers
                 ViewData["PractitionerId"] = id;
                 return View(patientViewModel);
             }
+        }
+
+        public IActionResult Update()
+        {
+            var patientViewModel = new PatientViewModel();
+            patientViewModel.PatientList = new Dictionary<string, PatientModel>();
+            return Index();
         }
         
     }
