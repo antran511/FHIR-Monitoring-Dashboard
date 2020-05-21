@@ -12,6 +12,5 @@ namespace FHIR_FIT3077.Models
         [Required]
         public string Id { get; set; }
 
-        public int Time { get; set; }
     }
 }

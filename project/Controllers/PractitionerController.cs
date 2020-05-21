@@ -56,6 +56,7 @@ namespace FHIR_FIT3077.Controllers
                 Console.WriteLine("exist cache");
                 var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(cacheKey);
                 patientViewModel.PatientList = patientList;
+                TempData["PracId"] = id;
                 ViewData["PractitionerId"] = id;
                 return View(patientViewModel);
             }
@@ -64,6 +65,7 @@ namespace FHIR_FIT3077.Controllers
                 Console.WriteLine("create new cache");
                 patientViewModel.PatientList = _practitioner.GetTotalPatients(id);
                 _cache.SetObject(cacheKey, patientViewModel.PatientList);
+                TempData["PracId"] = id;
                 ViewData["PractitionerId"] = id;
                 return View(patientViewModel);
             }
