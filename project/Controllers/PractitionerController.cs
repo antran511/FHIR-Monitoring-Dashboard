@@ -19,8 +19,6 @@ namespace FHIR_FIT3077.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            _cache.Refresh("Monitor");
-            _cache.Refresh("Patient");
             return View();
         }
 
@@ -39,8 +37,8 @@ namespace FHIR_FIT3077.Controllers
         {
             if (ModelState.IsValid)
             {
-                _cache.Refresh("Monitor" + model.Id);
-                _cache.Refresh("Patient" + model.Id);
+                _cache.Remove("Patient" + model.Id);
+                _cache.Remove("Monitor" + model.Id);
                 return RedirectToAction("LoadPatient", new {id = model.Id});
             }
 
@@ -52,45 +50,54 @@ namespace FHIR_FIT3077.Controllers
         public IActionResult LoadPatient(string id)
         {
             string cacheKey = "Patients" + id;
+            var patientViewModel = new PatientViewModel();
             if (_cache.ExistObject<Dictionary<string, PatientModel>>(cacheKey) == true)
             {
                 Console.WriteLine("exist cache");
-                var patientViewModel = new PatientViewModel();
                 var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(cacheKey);
                 patientViewModel.PatientList = patientList;
-                //TempData["PractitionerId"] = id;
-                //TempData.Keep("PractitionerId");
                 ViewData["PractitionerId"] = id;
                 return View(patientViewModel);
             }
             else
             {
                 Console.WriteLine("create new cache");
-                var patientViewModel = _practitioner.GetTotalPatients(id);
+                patientViewModel.PatientList = _practitioner.GetTotalPatients(id);
                 _cache.SetObject(cacheKey, patientViewModel.PatientList);
-                //TempData["PractitionerId"] = id;
-                //TempData.Keep("PractitionerId");
                 ViewData["PractitionerId"] = id;
                 return View(patientViewModel);
             }
         }
 
-        [HttpGet]
-        public IActionResult PeriodicLoad()
+        public IActionResult Update(string pracId)
         {
-            return View();
-        }
+            string cacheMonitorKey = "Monitor" + pracId;
+            string cachePatientKey = "Patients" + pracId;
+            var monitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
+            var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(cachePatientKey);
 
-        public void PeriodicLoadPerform(PractitionerModel model)
-        {
-            var startTimeSpan = TimeSpan.Zero;
-            var periodTimeSpan = TimeSpan.FromSeconds(30);
-            string pracId = (string)TempData["PractitionerId"];
-
-            var timer = new System.Threading.Timer((e) =>
+            foreach (var pat in patientList)
             {
-                _practitioner.GetTotalPatients(pracId);
-            }, null, startTimeSpan, periodTimeSpan);
+                pat.Value.Records = _practitioner.GetLatestRecords(pat.Value.Id);
+            }
+            _cache.SetObject(cachePatientKey, patientList);
+
+            if (monitorList != null)
+            {
+                foreach (var monitor in monitorList)
+                {
+                    monitor.Update(patientList[monitor.Id]);
+                }
+                _cache.SetObject(cacheMonitorKey, monitorList);
+                return RedirectToAction("UpdateMonitorView", "Monitor", new { pracId = pracId });
+            }
+            else
+            {
+                return new EmptyResult();
+            }
+            
+           
         }
+        
     }
 }

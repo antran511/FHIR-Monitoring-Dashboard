@@ -35,6 +35,7 @@ namespace FHIR_FIT3077
                 options.Configuration = "localhost:6379";
                 options.InstanceName = "FHIR_FIT3077";
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

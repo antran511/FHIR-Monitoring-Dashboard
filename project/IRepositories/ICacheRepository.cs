@@ -11,6 +11,6 @@ namespace FHIR_FIT3077.IRepositories
         void SetObject<T>(string key, T value);
         T GetObject<T>(string key);
         bool ExistObject<T>(string key);
-        void Refresh(string key);
+        void Remove(string key);
     }
 }

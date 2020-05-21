@@ -7,7 +7,9 @@ using Hl7.Fhir.Model;
 
 namespace FHIR_FIT3077.Models
 {
-    public class PatientModel : Subject
+    [Serializable()]
+
+    public class PatientModel 
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -21,6 +23,6 @@ namespace FHIR_FIT3077.Models
         
 
         public List<RecordModel> Records { get; set; }
-
+       
     }
 }

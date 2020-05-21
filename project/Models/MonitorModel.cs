@@ -5,16 +5,17 @@ using System.Threading.Tasks;
 using FHIR_FIT3077.Models;
 using Hl7.Fhir.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace FHIR_FIT3077.Observer
 {
     [Serializable()]
-    public class MonitorModel : IObserver<PatientModel>
+    public class MonitorModel 
     {
         //JsonProperty added for deserialization of private field
-        [JsonProperty]
+        [JsonProperty(PropertyName = "Id")]
         public string Id { get; private set; }
-        [JsonProperty]
+        [JsonProperty(PropertyName = "Name")]
         public string Name { get; private set; }
         [JsonProperty]
         public string Birthdate { get; private set; }
@@ -30,30 +31,16 @@ namespace FHIR_FIT3077.Observer
         public string Country { get; private set; }
         [JsonProperty]
         public List<RecordModel> Records { get; private set; }
-        [JsonIgnore]
-        private IDisposable _unsubscriber;
-       
-        public void Subscribe(IObservable<PatientModel> provider)
-        {
-            _unsubscriber ??= provider.Subscribe(this);
-        }
-       
 
-        public void Unsubscribe()
+
+        public string Identifier { get; set; }
+
+        public MonitorModel(string identifier)
         {
-            _unsubscriber.Dispose();
+            this.Identifier = identifier;
         }
 
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-        }
-
-        public void OnNext(PatientModel value)
+        public void Update(PatientModel value)
         {
             this.Id = value.Id;
             this.Name = value.Name;
@@ -66,8 +53,6 @@ namespace FHIR_FIT3077.Observer
             this.Records = value.Records;
         }
 
-       
 
-        
     }
 }

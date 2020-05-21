@@ -3,12 +3,18 @@
 @model FHIR_FIT3077.ViewModel.PatientViewModel;
 @{
     ViewData["Title"] = "Patients";
+    string pracId = (string)ViewData["PractitionerId"];
 }
 <html>
 <body>
     <div style="display:flex; flex-direction: row">
         <h1>List</h1>
-        @*<partial name="_PeriodicLoadPartial"/>*@
+        @*@using (Html.BeginForm("", "Practitioner", FormMethod.Post))
+            {
+                @Html.TextBoxFor(m => m.Id)
+                @Html.ValidationMessageFor(m => m.Id)
+                <button type="submit" value="Submit">Submit</button>
+            }*@
     </div>
 
     <form method="post">
@@ -31,6 +37,10 @@
         </table>
     </form>
 
+</div>
+<div>
+    <input type="text" name="interval" id="intervalInput" value="10"  />
+    </div>
     <h2>Monitor</h2>
 
     <div id="monitorView">
@@ -48,6 +58,28 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
+    var defaultInterval = setInterval(update, 100000);
+
+    $("#intervalInput").on("change",
+        function() {
+            clearInterval(defaultInterval);
+            defaultInterval = setInterval(update, $(this).val() * 1000);
+        });
+
+    function update() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Update", "Practitioner")',
+            data: { pracId: @pracId },
+            success: function(result) {
+                $("#monitorView").html(result);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    };
+
     function checkChanged(id) {
         if ($('#' + id).is(":checked")) {
             $.ajax({
@@ -66,10 +98,10 @@
                 type: "POST",
                 url: '@Url.Action("DeregisterPatient", "Monitor")',
                 data: { Id: id, pracId: @pracId },
-                success: function (result) {
+                success: function(result) {
                     $("#monitorView").html(result);
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log(error);
                 }
             })

@@ -10,7 +10,7 @@ namespace FHIR_FIT3077.ViewModel
 {
     public class PatientViewModel
     {
-        public Dictionary<string, PatientModel> PatientList { get; set; }
-        public List<MonitorModel> MonitorList { get; set; }
+        public static Dictionary<string, PatientModel> PatientList { get; set; }
+        public static List<MonitorModel> MonitorList { get; set; }
     }
 }
