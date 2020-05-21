@@ -50,10 +50,10 @@ namespace FHIR_FIT3077.Controllers
         public IActionResult LoadPatient(string id)
         {
             string cacheKey = "Patients" + id;
+            var patientViewModel = new PatientViewModel();
             if (_cache.ExistObject<Dictionary<string, PatientModel>>(cacheKey) == true)
             {
                 Console.WriteLine("exist cache");
-                var patientViewModel = new PatientViewModel();
                 var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(cacheKey);
                 patientViewModel.PatientList = patientList;
                 ViewData["PractitionerId"] = id;
@@ -62,18 +62,41 @@ namespace FHIR_FIT3077.Controllers
             else
             {
                 Console.WriteLine("create new cache");
-                var patientViewModel = _practitioner.GetTotalPatients(id);
+                patientViewModel.PatientList = _practitioner.GetTotalPatients(id);
                 _cache.SetObject(cacheKey, patientViewModel.PatientList);
                 ViewData["PractitionerId"] = id;
                 return View(patientViewModel);
             }
         }
 
-        public IActionResult Update()
+        public IActionResult Update(string pracId)
         {
-            var patientViewModel = new PatientViewModel();
-            patientViewModel.PatientList = new Dictionary<string, PatientModel>();
-            return Index();
+            string cacheMonitorKey = "Monitor" + pracId;
+            string cachePatientKey = "Patients" + pracId;
+            var monitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
+            var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(cachePatientKey);
+
+            foreach (var pat in patientList)
+            {
+                pat.Value.Records = _practitioner.GetLatestRecords(pat.Value.Id);
+            }
+            _cache.SetObject(cachePatientKey, patientList);
+
+            if (monitorList != null)
+            {
+                foreach (var monitor in monitorList)
+                {
+                    monitor.Update(patientList[monitor.Id]);
+                }
+                _cache.SetObject(cacheMonitorKey, monitorList);
+                return RedirectToAction("UpdateMonitorView", "Monitor", new { pracId = pracId });
+            }
+            else
+            {
+                return new EmptyResult();
+            }
+            
+           
         }
         
     }

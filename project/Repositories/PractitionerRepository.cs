@@ -20,40 +20,50 @@ namespace FHIR_FIT3077.Repository
             _client.Timeout = 120000;
         }
 
-        public PatientViewModel GetTotalPatients(string id)
+        public Dictionary<string, PatientModel> GetTotalPatients(string id)
         {
             InitializeClient();
 
-            var patientViewModel = new PatientViewModel();
             var patientList = new Dictionary<string, PatientModel>();
             Bundle result = _client.Search<Encounter>(new string[]
             {
                 "participant.identifier=http://hl7.org/fhir/sid/us-npi|" + id.ToString()
             });
-            
+            while (result != null)
+            {
                 foreach (var e in result.Entry)
                 {
                     Encounter p = (Encounter)e.Resource;
                     var res = p.Subject.Reference;
                     var patientId = res.Split('/')[1];
                     var patientName = p.Subject.Display;
-                    var patient = new PatientModel() { Id = patientId, Name = patientName, Records = new List<RecordModel>() };
+                    var patient = new PatientModel() { Id = patientId, Name = patientName, Records = GetLatestRecords(patientId) };
 
                     if (!patientList.ContainsKey(patientId))
                     {
-                        var record = GetCholesterolRecordById(patientId);
-                        patient.Records.Add(record);
                         patientList.Add(patientId, patient);
                     }
                 }
 
+                result = _client.Continue(result);
+            }
+                
 
-            patientViewModel.PatientList = patientList;
-            return patientViewModel;
+
+            return patientList;
         }
 
-        public RecordModel GetCholesterolRecordById(string id)
+        public List<RecordModel> GetLatestRecords(string id)
         {
+            var recordList = new List<RecordModel>();
+            var cholesterolRecord = GetCholesterolRecordById( id);
+            recordList.Add(cholesterolRecord);
+            return recordList;
+        }
+
+        private RecordModel GetCholesterolRecordById(string id)
+        {
+            InitializeClient();
             var q = new SearchParams().Where("patient=" + id).Where("code=2093-3").OrderBy("-date");
             Bundle result = _client.Search<Observation>(q);
 

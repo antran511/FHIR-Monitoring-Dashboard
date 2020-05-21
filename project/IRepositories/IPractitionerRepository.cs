@@ -10,9 +10,10 @@ namespace FHIR_FIT3077.IRepository
 {
     public interface IPractitionerRepository
     {
-        PatientViewModel GetTotalPatients(string id);
+        Dictionary<string, PatientModel> GetTotalPatients(string id);
+        List<RecordModel> GetLatestRecords(string id);
 
-        
+
 
     }
 }
