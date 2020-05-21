@@ -1,47 +1,38 @@
-﻿@model FHIR_FIT3077.ViewModel.PatientViewModel;
+﻿@model FHIR_FIT3077.ViewModels.PatientDetailsViewModel;
 @{
     ViewData["Title"] = "PatientDisplay";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{ string id = (string)ViewData["id"]; }
-@foreach (var item in Model.MonitorList)
-{
-    if (item.Id == id)
-    {
-        <h1>@item.Name</h1>
-        <table>
-            <tr>
-                <td>ID</td>
-                <td>@item.Id</td>
-            </tr>
-            <tr>
-                <td>Birthdate</td>
-                <td>@item.Birthdate</td>
-            </tr>
-            <tr>
-                <td>Gender</td>
-                <td>@item.Gender</td>
-            </tr>
-            <tr>
-                <td>Address</td>
-                <td>@item.Address</td>
-            </tr>
-            <tr>
-                <td>City</td>
-                <td>@item.City</td>
-            </tr>
-            <tr>
-                <td>State</td>
-                <td>@item.State</td>
-            </tr>
-            <tr>
-                <td>Country</td>
-                <td>@item.Country</td>
-            </tr>
-        </table>
-
-        break;
-    }
-}
-
+<h1>Patient Details</h1>
+<h1>@Model.Name</h1>
+<table>
+    <tr>
+        <td>ID</td>
+        <td>@Model.Id</td>
+    </tr>
+    <tr>
+        <td>Birthdate</td>
+        <td>@Model.Birthdate</td>
+    </tr>
+    <tr>
+        <td>Gender</td>
+        <td>@Model.Gender</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>@Model.Address</td>
+    </tr>
+    <tr>
+        <td>City</td>
+        <td>@Model.City</td>
+    </tr>
+    <tr>
+        <td>State</td>
+        <td>@Model.State</td>
+    </tr>
+    <tr>
+        <td>Country</td>
+        <td>@Model.Country</td>
+    </tr>
+</table>

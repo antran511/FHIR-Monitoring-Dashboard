@@ -24,9 +24,9 @@
                     if (value == cholVal && Model.MonitorList.Count > 1)
                     {
                         <tr>
-                            <td onclick="myClick(@item)"><span style="color:red">@item.Name</span></td>
-                            <td onclick="myClick(@item)"><span style="color:red">@item.Records[0].Value</span></td>
-                            <td onclick="myClick(@item)"><span style="color:red">@item.Records[0].Date</span></td>
+                            <td onclick="myClick(@item.Id)"><span style="color:red">@item.Name</span></td>
+                            <td onclick="myClick(@item.Id)"><span style="color:red">@item.Records[0].Value</span></td>
+                            <td onclick="myClick(@item.Id)"><span style="color:red">@item.Records[0].Date</span></td>
                         </tr>
                         renderedFlag = true;
                     }
@@ -34,9 +34,9 @@
                 if(!renderedFlag)
                 {
                     <tr>
-                        <td onclick="myClick(@item)">@item.Name</td>
-                        <td onclick="myClick(@item)">@item.Records[0].Value</td>
-                        <td onclick="myClick(@item)">@item.Records[0].Date</td>
+                        <td onclick="myClick(@item.Id)">@item.Name</td>
+                        <td onclick="myClick(@item.Id)">@item.Records[0].Value</td>
+                        <td onclick="myClick(@item.Id)">@item.Records[0].Date</td>
                     </tr>
                 }
 
@@ -48,8 +48,8 @@
 </table>
 
 <script>
-    function myClick(item) {
-        @*var url = '@Url.Action("PatientDisplay", "Patient", new { id = "__id__" })';
-        window.location.href = url.replace('__id__', id);*@
+    function myClick(id) {
+        var url = '@Url.Action("PatientDisplay", "Patient", new { id = "__id__" })';
+        window.location.href = url.replace('__id__', id);
     }
 </script>

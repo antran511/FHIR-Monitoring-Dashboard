@@ -27,8 +27,10 @@ namespace FHIR_FIT3077.Controllers
             string cacheMonitorKey = "Monitor" + pracId;
             if (_cache.ExistObject<List<PatientViewModel>>(cacheMonitorKey) == true)
             {
-                var monitorViewModel = new PatientViewModel();
-                monitorViewModel.MonitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey);
+                var monitorViewModel = new PatientViewModel
+                {
+                    MonitorList = _cache.GetObject<List<MonitorModel>>(cacheMonitorKey)
+                };
                 var monitorToRemove = monitorViewModel.MonitorList.SingleOrDefault(monitor => monitor.Id == id);
                 monitorViewModel.MonitorList.Remove(monitorToRemove);
                 _cache.SetObject(cacheMonitorKey, monitorViewModel.MonitorList);

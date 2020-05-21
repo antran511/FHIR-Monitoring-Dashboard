@@ -58,8 +58,7 @@ namespace FHIR_FIT3077.Controllers
                 var patientViewModel = new PatientViewModel();
                 var patientList = _cache.GetObject<Dictionary<string, PatientModel>>(cacheKey);
                 patientViewModel.PatientList = patientList;
-                //TempData["PractitionerId"] = id;
-                //TempData.Keep("PractitionerId");
+                TempData["PracId"] = id;
                 ViewData["PractitionerId"] = id;
                 return View(patientViewModel);
             }
@@ -68,29 +67,10 @@ namespace FHIR_FIT3077.Controllers
                 Console.WriteLine("create new cache");
                 var patientViewModel = _practitioner.GetTotalPatients(id);
                 _cache.SetObject(cacheKey, patientViewModel.PatientList);
-                //TempData["PractitionerId"] = id;
-                //TempData.Keep("PractitionerId");
+                TempData["PracId"] = id;
                 ViewData["PractitionerId"] = id;
                 return View(patientViewModel);
             }
-        }
-
-        [HttpGet]
-        public IActionResult PeriodicLoad()
-        {
-            return View();
-        }
-
-        public void PeriodicLoadPerform(PractitionerModel model)
-        {
-            var startTimeSpan = TimeSpan.Zero;
-            var periodTimeSpan = TimeSpan.FromSeconds(30);
-            string pracId = (string)TempData["PractitionerId"];
-
-            var timer = new System.Threading.Timer((e) =>
-            {
-                _practitioner.GetTotalPatients(pracId);
-            }, null, startTimeSpan, periodTimeSpan);
         }
     }
 }
