@@ -37,10 +37,13 @@ namespace FHIR_FIT3077.Repository
                     var res = p.Subject.Reference;
                     var patientId = res.Split('/')[1];
                     var patientName = p.Subject.Display;
-                    var patient = new PatientModel() { Id = patientId, Name = patientName, Records = GetLatestRecords(patientId) };
+                    var patient = new PatientModel() { Id = patientId, Name = patientName, Records = new List<RecordModel>() };
 
                     if (!patientList.ContainsKey(patientId))
                     {
+                        var record = GetCholesterolRecordById(patientId);
+                        patient.Records.Add(record);
+                        GetPatientDetails(patient);
                         patientList.Add(patientId, patient);
                     }
                 }

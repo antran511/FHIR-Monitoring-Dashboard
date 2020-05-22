@@ -9,12 +9,6 @@
 <body>
     <div style="display:flex; flex-direction: row">
         <h1>List</h1>
-        @*@using (Html.BeginForm("", "Practitioner", FormMethod.Post))
-            {
-                @Html.TextBoxFor(m => m.Id)
-                @Html.ValidationMessageFor(m => m.Id)
-                <button type="submit" value="Submit">Submit</button>
-            }*@
     </div>
 
     <form method="post">
@@ -37,7 +31,6 @@
         </table>
     </form>
 
-</div>
 <div>
     <input type="text" name="interval" id="intervalInput" value="10"  />
     </div>
@@ -53,8 +46,6 @@
 </body>
 </html>
 
-@{ @*string pracId = (string)TempData["PractitionerId"];*@
-    string pracId = (string)ViewData["PractitionerId"];}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
