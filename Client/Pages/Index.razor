@@ -1,0 +1,53 @@
+﻿@page "/"
+@using FIT3077.Client.Services
+@inject MonitorState State
+@using BlazorStyled.Stylesheets
+<style>
+    .card_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 50px;
+        background-color: #394263;
+        color: #FFF;
+    }
+
+</style>
+<div class="top-row">
+    <Submission OnSearch="State.Search" IsSearching="State.SearchInProgress"></Submission>
+</div>
+<div>
+    <div class="container pt-4">
+        <div class="row" >
+            <div class="col-4" >
+                <div class="bg-light" style="height: 350px;">
+                    <div class="card_header">
+                        <div class="pl-2">Patient List</div>
+                    </div>
+                    <div class="bg-light" style="overflow-y: auto; height:300px">
+                        <PatientList Patients="State.Patients"></PatientList>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-8 rounded">
+                <div class="bg-light" style=" height: 350px;">
+                    <div class="card_header">
+                        <div class="pl-2">Monitor List</div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+
+    protected override void OnInitialized()
+    {
+        State.OnChange += StateHasChanged;
+    }
+
+}

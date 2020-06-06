@@ -1,0 +1,15 @@
+﻿
+
+<div class="@(IsGreyedOut ? "greyout" : null)" style="overflow-y: auto">
+    <div class="cover"></div>
+    @ChildContent
+</div>
+
+@code
+{
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool IsGreyedOut { get; set; }
+}
