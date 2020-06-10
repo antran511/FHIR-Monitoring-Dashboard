@@ -1,0 +1,34 @@
+﻿@using FIT3077.Shared.Models
+@if (Patients != null)
+{
+    <Table style="height: 250px">
+        <TableHeader>
+            <TableRow>
+                <TableHeaderCell>Name</TableHeaderCell>
+                <TableHeaderCell>Monitor</TableHeaderCell>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+
+            @foreach (var patient in Patients)
+            {
+                <TableRow>
+                    <TableRowCell>
+                        @patient.Value.Name
+                    </TableRowCell>
+                    <TableRowCell>
+                        <button class="btn btn-primary">Add</button>
+                    </TableRowCell>
+                </TableRow>
+            }
+
+        </TableBody>
+    </Table>
+}
+@code
+{
+    [Parameter]
+    public IReadOnlyDictionary<string, Patient> Patients { get; set; }
+
+
+}
