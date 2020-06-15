@@ -5,8 +5,8 @@ using System.Text;
 
 namespace FIT3077.Shared.Models
 {
-    public class Practitioner
+    public class SearchParameter
     {
-        public string Id { get; set; }
+        public string Value { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace FIT3077.Client
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddSingleton<MonitorState>();
+            builder.Services.AddSingleton<AppStateService>();
             builder.Services.AddBlazorStyled();
             var host = builder.Build();
 

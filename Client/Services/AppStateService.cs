@@ -8,25 +8,26 @@ using FIT3077.Shared.Models;
 
 namespace FIT3077.Client.Services
 {
-    public class MonitorState
+    public class AppStateService
     {
+        public Dashboard Dashboard { get; } = new Dashboard();
         public IReadOnlyDictionary<string, Patient> Patients { get; private set; }
         public bool SearchInProgress { get; private set; }
 
         public event Action OnChange;
 
         private readonly HttpClient _http;
-        public MonitorState(HttpClient httpClient)
+        public AppStateService(HttpClient httpClient)
         {
             _http = httpClient;
         }
 
-        public async Task Search(string id)
+        public async Task Search(string value)
         {
             SearchInProgress = true;
             NotifyStateChanged();
 
-            Patients = await _http.GetFromJsonAsync<Dictionary<string, Patient>>($"/api/practitioner/{id}");
+            Dashboard.Patients = await _http.GetFromJsonAsync<Dictionary<string, Patient>>($"/api/practitioner/{value}");
             SearchInProgress = false;
             NotifyStateChanged();
         }

@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using FIT3077.Client.Services
-@inject MonitorState State
+@inject AppStateService State
 @using BlazorStyled.Stylesheets
 <style>
     .card_header {
@@ -25,7 +25,7 @@
                         <div class="pl-2">Patient List</div>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <PatientList Patients="State.Patients"></PatientList>
+                        <PatientList Patients="State.Dashboard.Patients"></PatientList>
 
                     </div>
 
