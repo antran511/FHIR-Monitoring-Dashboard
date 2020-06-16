@@ -1,34 +1,36 @@
 ﻿@using FIT3077.Shared.Models
-@if (Patients != null)
-{
-    <Table style="height: 250px">
+    <style>
+        .center {
+            text-align: center;
+        }
+    </style>
+    <Table Striped="true">
         <TableHeader>
-            <TableRow>
-                <TableHeaderCell>Name</TableHeaderCell>
-                <TableHeaderCell>Monitor</TableHeaderCell>
-            </TableRow>
+            <TableHeaderCell  class="center col-8" style="vertical-align: top;">Name</TableHeaderCell>
+            <TableHeaderCell class="center col-4" >Monitor</TableHeaderCell>
         </TableHeader>
         <TableBody>
-
+        @if (Patients != null)
+        {
             @foreach (var patient in Patients)
             {
                 <TableRow>
-                    <TableRowCell>
+                    <TableRowCell class="center" >
                         @patient.Value.Name
                     </TableRowCell>
-                    <TableRowCell>
-                        <button class="btn btn-primary">Add</button>
+                    <TableRowCell class="center" >
+                        <button class="btn btn-primary btn-sm" @onclick="() => OnAdd.InvokeAsync(patient.Value)">Add</button>
                     </TableRowCell>
                 </TableRow>
             }
-
+        }
         </TableBody>
     </Table>
-}
 @code
 {
     [Parameter]
     public IReadOnlyDictionary<string, Patient> Patients { get; set; }
-
-
+    [Parameter]
+    public EventCallback<Patient> OnAdd { get; set; }
+    
 }

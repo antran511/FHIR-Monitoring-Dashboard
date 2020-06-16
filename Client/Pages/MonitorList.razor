@@ -1,0 +1,42 @@
+﻿@using FIT3077.Shared.Models
+<style>
+    .center {
+        text-align: center;
+    }
+</style>
+
+    <Table  Striped="true">
+        <TableHeader>
+            <TableRow>
+                <TableHeaderCell class="center col-8">Name</TableHeaderCell>
+                <TableHeaderCell class="center col-2">Total Cholesterol</TableHeaderCell>
+                <TableHeaderCell class="center col-8">Time</TableHeaderCell>
+                <TableHeaderCell class="center col-2">Systolic Blood Pressure</TableHeaderCell>
+                <TableHeaderCell class="center col-2">Diastolic Blood Pressure</TableHeaderCell>
+                <TableHeaderCell class="center col-2">Time</TableHeaderCell>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+        @if (Monitors != null)
+        {
+            @foreach (var monitor in Monitors)
+            {
+                <TableRow>
+                    <TableRowCell class="center">
+                        @monitor.PatientName
+                    </TableRowCell>
+                    <TableRowCell class="center">
+                        @monitor.MeasurementList.CholesterolRecords[0].Value
+                    </TableRowCell >
+                    <TableRowCell class="center">
+                        @monitor.MeasurementList.CholesterolRecords[0].Date
+                    </TableRowCell>
+                </TableRow>
+            }
+        }
+        </TableBody>
+    </Table>
+@code {
+    [Parameter]
+    public List<Monitor> Monitors { get; set; }
+}
