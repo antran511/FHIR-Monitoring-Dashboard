@@ -48,7 +48,11 @@ namespace FIT3077.Server.Controllers
                         Value = ((Quantity)o.Component[0].Value).Value.ToString(),
                         Date = o.Issued.ToFhirDateTime(),
                     };
-                    bloodPressureRecords.Add(new BloodPressureRecord(systolicRecord, diastolicRecord));
+                    bloodPressureRecords.Add(new BloodPressureRecord()
+                    {
+                        SystolicRecord = systolicRecord,
+                        DiastolicRecord = diastolicRecord
+                    });
                 };
             }
 

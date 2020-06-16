@@ -17,23 +17,52 @@
             </TableRow>
         </TableHeader>
         <TableBody>
-        @if (Monitors != null)
-        {
-            @foreach (var monitor in Monitors)
+            @if (Monitors != null)
             {
+                @foreach (var monitor in Monitors)
+                {
                 <TableRow>
                     <TableRowCell class="center">
                         @monitor.PatientName
                     </TableRowCell>
-                    <TableRowCell class="center">
-                        @monitor.MeasurementList.CholesterolRecords[0].Value
-                    </TableRowCell >
-                    <TableRowCell class="center">
-                        @monitor.MeasurementList.CholesterolRecords[0].Date
-                    </TableRowCell>
+
+                    @if (monitor.MeasurementList.CholesterolRecords.Count > 0)
+                    {
+                        <TableRowCell Class="center">
+                            @monitor.MeasurementList.CholesterolRecords[0].Value
+                        </TableRowCell>
+                        <TableRowCell Class="center">
+                            @monitor.MeasurementList.CholesterolRecords[0].Date
+                        </TableRowCell>
+                    }
+                    else
+                    {
+                        <TableRowCell Class="center"></TableRowCell>
+                        <TableRowCell Class="center"></TableRowCell>
+                        <TableRowCell Class="center"></TableRowCell>
+                    }
+
+                    @if (monitor.MeasurementList.BloodPressureRecords.Count > 0)
+                    {
+                        <TableRowCell Class="center">
+                            @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
+                        </TableRowCell>
+                        <TableRowCell Class="center">
+                            @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
+                        </TableRowCell>
+                        <TableRowCell Class="center">
+                            @monitor.MeasurementList.BloodPressureRecords[0].Date
+                        </TableRowCell>
+                    }
+                    else
+                    {
+                        <TableRowCell Class="center"></TableRowCell>
+                        <TableRowCell Class="center"></TableRowCell>
+                        <TableRowCell Class="center"></TableRowCell>
+                    }
                 </TableRow>
+                }
             }
-        }
         </TableBody>
     </Table>
 @code {

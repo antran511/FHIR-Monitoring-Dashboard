@@ -43,10 +43,17 @@ namespace FIT3077.Client.Services
         public async Task<Measurement> FetchMeasurement(Monitor monitor)
         {
             var id = monitor.PatientId;
+            var fetchBloodPressureTask = _http.GetFromJsonAsync<List<BloodPressureRecord>>(
+                $"/api/patient/{id}/measurement/blood-pressure");
+            var fetchCholesterolTask = _http.GetFromJsonAsync<List<Record>>(
+                $"/api/patient/{id}/measurement/cholesterol");
+            await Task.WhenAll(fetchBloodPressureTask, fetchCholesterolTask);
+            var bloodPressureRecords = await fetchBloodPressureTask;
+            var cholesterolRecord = await fetchCholesterolTask;
             var measurement = new Measurement()
             {
-                //BloodPressureRecords = await _http.GetFromJsonAsync<List<BloodPressureRecord>>($"/api/patient/{id}/measurement/blood-pressure"),
-                CholesterolRecords = await _http.GetFromJsonAsync<List<Record>>($"/api/patient/{id}/measurement/cholesterol")
+                BloodPressureRecords = bloodPressureRecords,
+                CholesterolRecords = cholesterolRecord
             };
             return measurement;
         }
