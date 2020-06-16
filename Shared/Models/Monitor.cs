@@ -6,7 +6,7 @@ namespace FIT3077.Shared.Models
     {
         public string PatientId { get; set; }
         public string PatientName { get; set; }
-        public List<Measurement> MeasurementList { get; set; }
+        public Measurement MeasurementList { get; set; }
 
         public Monitor(string patientId, string patientName)
         {

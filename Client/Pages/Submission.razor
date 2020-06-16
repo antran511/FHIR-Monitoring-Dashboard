@@ -25,8 +25,8 @@
 
 </style>
 <div>
-    <EditForm Model="@practitioner" class="input-group">
-        <InputText class="px-2" id="pracId" placeholder="Practitioner identifier" @bind-Value="practitioner.Id" />
+    <EditForm Model="@parameter" class="input-group">
+        <InputText class="px-2" id="pracId" placeholder="Practitioner identifier" @bind-Value="parameter.Value" />
         <div class="input-group-append">
             @if (IsSearching)
             {

@@ -17,7 +17,7 @@
     <Submission OnSearch="State.Search" IsSearching="State.SearchInProgress"></Submission>
 </div>
 <div>
-    <div class="container pt-4">
+    <div class="fluid-container py-4">
         <div class="row" >
             <div class="col-4" >
                 <div class="bg-light" style="height: 350px;">
@@ -25,8 +25,7 @@
                         <div class="pl-2">Patient List</div>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <PatientList Patients="State.Dashboard.Patients"></PatientList>
-
+                        <PatientList Patients="State.Dashboard.Patients" OnAdd="State.AddToMonitor"></PatientList>
                     </div>
 
                 </div>
@@ -36,7 +35,9 @@
                     <div class="card_header">
                         <div class="pl-2">Monitor List</div>
                     </div>
-                    
+                    <div class="bg-light" style="overflow-y: auto; height:300px">
+                        <MonitorList Monitors="State.Dashboard.Monitors"></MonitorList>
+                    </div>
                 </div>
             </div>
         </div>

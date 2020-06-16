@@ -31,6 +31,25 @@ namespace FIT3077.Client.Services
             SearchInProgress = false;
             NotifyStateChanged();
         }
+
+        public async Task AddToMonitor(Patient patient)
+        {
+            Monitor monitor = new Monitor(patient.Id, patient.Name);
+            monitor.MeasurementList = await FetchMeasurement(monitor);
+            Dashboard.RegisterMonitor(monitor);
+            NotifyStateChanged();
+        }
+
+        public async Task<Measurement> FetchMeasurement(Monitor monitor)
+        {
+            var id = monitor.PatientId;
+            var measurement = new Measurement()
+            {
+                //BloodPressureRecords = await _http.GetFromJsonAsync<List<BloodPressureRecord>>($"/api/patient/{id}/measurement/blood-pressure"),
+                CholesterolRecords = await _http.GetFromJsonAsync<List<Record>>($"/api/patient/{id}/measurement/cholesterol")
+            };
+            return measurement;
+        }
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
 }
