@@ -23,7 +23,7 @@ namespace FIT3077.Shared.Models
             double totalChol = 0.0;
             for (int i = 0; i < Monitors.Count; i++)
             {
-                var monitor = Monitors[i].MeasurementList.CholesterolRecords[0].Value;
+                var monitor = Monitors[i].MeasurementList.CholesterolRecords[0].CholesterolValue;
                 var val = Convert.ToDouble(monitor);
                 totalChol += val;
             }
@@ -31,7 +31,7 @@ namespace FIT3077.Shared.Models
             var averageChol = totalChol / Monitors.Count;
             foreach(var t in Monitors)
             {
-                var val = Convert.ToDouble(t.MeasurementList.CholesterolRecords[0].Value);
+                var val = Convert.ToDouble(t.MeasurementList.CholesterolRecords[0].CholesterolValue);
                 if (val > averageChol)
                 {
                     t.CholFlag = true;
@@ -41,29 +41,45 @@ namespace FIT3077.Shared.Models
 
         public void HighBloodPressureFlag()
         {
-            double totalChol = 0.0;
+            double totalSystolic = 0.0;
+            double totalDiastolic = 0.0;
             for (int i = 0; i < Monitors.Count; i++)
             {
-                var monitor = Monitors[i].MeasurementList.CholesterolRecords[0].Value;
-                var val = Convert.ToDouble(monitor);
-                totalChol += val;
+                var systolic = Monitors[i].MeasurementList.BloodPressureRecords[0].SystolicValue;
+                var systolicVal = Convert.ToDouble(systolic);
+
+                var diastolic = Monitors[i].MeasurementList.BloodPressureRecords[0].DiastolicValue;
+                var diastolicVal = Convert.ToDouble(diastolic);
+
+                totalSystolic += systolicVal;
+                totalDiastolic += diastolicVal;
             }
 
-            var averageChol = totalChol / Monitors.Count;
+            var averageSystolic = totalSystolic / Monitors.Count;
+            var averageDiastolic = totalDiastolic / Monitors.Count;
             foreach (var t in Monitors)
             {
-                var val = Convert.ToDouble(t.MeasurementList.CholesterolRecords[0].Value);
-                if (val > averageChol)
+                var systolicVal = Convert.ToDouble(t.MeasurementList.BloodPressureRecords[0].SystolicValue);
+                var diastolicVal = Convert.ToDouble(t.MeasurementList.BloodPressureRecords[0].DiastolicValue);
+                if (systolicVal > averageSystolic)
                 {
-                    t.CholFlag = true;
+                    t.SystolicFlag = true;
+                }
+                if (diastolicVal > averageDiastolic)
+                {
+                    t.DiastolicFlag = true;
                 }
             }
 
         }
 
-        public void DeregisterMonitor(string monitorId)
+
+
+        public void DeregisterMonitor(Monitor monitor)
         {
-            Monitors?.Remove(Monitors.SingleOrDefault(m => m.PatientId == monitorId));
+            Monitors?.Remove(Monitors.SingleOrDefault(m => m.PatientId == monitor.PatientId));
+            HighCholFlag();
+            HighBloodPressureFlag();
         }
     }
 }

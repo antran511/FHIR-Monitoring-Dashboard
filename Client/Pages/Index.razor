@@ -26,7 +26,7 @@
                         <div class="pl-2">Patient List</div>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <PatientList Patients="State.Patients" OnAdd="State.AddToMonitors" ></PatientList>
+                        <PatientList Patients="State.Patients" OnAdd="State.AddToMonitors" IsLoading="State.SearchInProgress"></PatientList>
                     </div>
 
                 </div>

@@ -44,6 +44,15 @@ namespace FIT3077.Server.Controllers
                     });
                 };
             }
+            else
+            {
+                bloodPressureRecords.Add(item: new BloodPressureRecord()
+                {
+                    DiastolicValue = "0",
+                    SystolicValue = "0",
+                    Date = ""
+                });
+            }
 
             return bloodPressureRecords;
 
@@ -70,6 +79,14 @@ namespace FIT3077.Server.Controllers
                     Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm")
                 };
                 cholesterolRecords.Add(record);
+            }
+            else
+            {
+                cholesterolRecords.Add(new CholesterolRecord()
+                {
+                    CholesterolValue = "0",
+                    Date = ""
+                });
             }
             return cholesterolRecords;
 

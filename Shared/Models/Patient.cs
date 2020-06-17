@@ -8,5 +8,6 @@ namespace FIT3077.Shared.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public bool IsMonitored { get; set; } = false;
     }
 }

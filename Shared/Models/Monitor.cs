@@ -10,7 +10,9 @@ namespace FIT3077.Shared.Models
 
         public bool CholFlag { get; set; }
 
-        public bool BloodPressureFlag { get; set; }
+        public bool SystolicFlag { get; set; }
+
+        public bool DiastolicFlag { get; set; }
 
         public Monitor(string patientId, string patientName)
         {

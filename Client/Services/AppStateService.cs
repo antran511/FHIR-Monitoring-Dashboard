@@ -29,6 +29,7 @@ namespace FIT3077.Client.Services
             NotifyStateChanged();
 
             Dashboard.Patients = await _http.GetFromJsonAsync<Dictionary<string, Patient>>($"/api/practitioner/{value}");
+            Dashboard.Monitors.Clear();
             SearchInProgress = false;
             NotifyStateChanged();
         }
@@ -36,14 +37,20 @@ namespace FIT3077.Client.Services
         public async Task AddToMonitors(Patient patient)
         {
             Monitor monitor = new Monitor(patient.Id, patient.Name);
+            SearchInProgress = true;
+            NotifyStateChanged();
+
             monitor.MeasurementList = await FetchMeasurement(monitor);
             Dashboard.RegisterMonitor(monitor);
+            SearchInProgress = false;
+            Dashboard.Patients.SingleOrDefault(p => p.Key == monitor.PatientId).Value.IsMonitored = true;
             NotifyStateChanged();
         }
 
-        public void RemoveFromMonitors(string monitorId)
+        public void RemoveFromMonitors(Monitor monitor)
         {
-            Dashboard.DeregisterMonitor(monitorId);
+            Dashboard.DeregisterMonitor(monitor);
+            Dashboard.Patients.SingleOrDefault(p => p.Key == monitor.PatientId).Value.IsMonitored = false;
             NotifyStateChanged();
         }
 

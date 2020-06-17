@@ -24,52 +24,96 @@
             {
                 @foreach (var monitor in Monitors)
                 {
-            <TableRow>
-                <TableRowCell class="center">
-                    @monitor.PatientName
-                </TableRowCell>
-                <TableRowCell class="center">
-                    <Check TValue="bool" Checked="monitor.MeasurementList.CholesterolRecords[0].IsMonitored" CheckedChanged="() => OnMonitorRecord.InvokeAsync(monitor.MeasurementList.CholesterolRecords[0])"></Check>
-                </TableRowCell>
-                @if (monitor.MeasurementList.CholesterolRecords.Count > 0 && monitor.MeasurementList.CholesterolRecords[0].IsMonitored)
-                {
-                    <TableRowCell Class="center">
-                        @monitor.MeasurementList.CholesterolRecords[0].CholesterolValue
-                    </TableRowCell>
-                    <TableRowCell Class="center">
-                        @monitor.MeasurementList.CholesterolRecords[0].Date
-                    </TableRowCell>
-                }
-                else
-                {
-                    <TableRowCell Class="center"></TableRowCell>
-                    <TableRowCell Class="center"></TableRowCell>
-                }
-                <TableRowCell class="center">
-                    <Check TValue="bool" Checked="monitor.MeasurementList.BloodPressureRecords[^1].IsMonitored" CheckedChanged="()=>OnMonitorRecord.InvokeAsync(monitor.MeasurementList.BloodPressureRecords[^1])" ></Check>
-                </TableRowCell>
-                @if (monitor.MeasurementList.BloodPressureRecords.Count > 0 && monitor.MeasurementList.BloodPressureRecords[^1].IsMonitored)
-                {
-                    <TableRowCell Class="center">
-                        @monitor.MeasurementList.BloodPressureRecords[^1].SystolicValue
-                    </TableRowCell>
-                    <TableRowCell Class="center">
-                        @monitor.MeasurementList.BloodPressureRecords[^1].DiastolicValue
-                    </TableRowCell>
-                    <TableRowCell Class="center">
-                        @monitor.MeasurementList.BloodPressureRecords[^1].Date
-                    </TableRowCell>
-                }
-                else
-                {
-                    <TableRowCell Class="center"></TableRowCell>
-                    <TableRowCell Class="center"></TableRowCell>
-                    <TableRowCell Class="center"></TableRowCell>
-                }
-                <TableRowCell class="center" >
-                    <button class="btn btn-danger btn-sm" @onclick="() => OnRemove.InvokeAsync(monitor.PatientId)" >Remove</button>
-                </TableRowCell>
-            </TableRow>
+                    <TableRow>
+                        <TableRowCell class="center">
+                            @monitor.PatientName
+                        </TableRowCell>
+
+                        <TableRowCell class="center">
+                            <Check TValue="bool" Checked="monitor.MeasurementList.CholesterolRecords[0].IsMonitored" CheckedChanged="() => OnMonitorRecord.InvokeAsync(monitor.MeasurementList.CholesterolRecords[0])"></Check>
+                        </TableRowCell>
+
+                        @if (monitor.MeasurementList.CholesterolRecords.Count > 0 && monitor.MeasurementList.CholesterolRecords[0].IsMonitored)
+                        {
+                            @if (monitor.CholFlag == true)
+                            {
+                                <TableRowCell Class="center">
+                                    <span style="color:red">@monitor.MeasurementList.CholesterolRecords[0].CholesterolValue </span>
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.CholesterolRecords[0].Date
+                                </TableRowCell>
+                            }
+                            else
+                            {
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.CholesterolRecords[0].CholesterolValue 
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.CholesterolRecords[0].Date
+                                </TableRowCell>
+                            }
+
+                        }
+                        else
+                        {
+                            <TableRowCell Class="center"></TableRowCell>
+                            <TableRowCell Class="center"></TableRowCell>
+                            <TableRowCell Class="center"></TableRowCell>
+                        }
+
+                        <TableRowCell class="center">
+                            <Check TValue="bool" Checked="monitor.MeasurementList.BloodPressureRecords[^1].IsMonitored" CheckedChanged="()=>OnMonitorRecord.InvokeAsync(monitor.MeasurementList.BloodPressureRecords[^1])"></Check>
+                        </TableRowCell>
+
+                        @if (monitor.MeasurementList.BloodPressureRecords.Count > 0 && monitor.MeasurementList.BloodPressureRecords[^1].IsMonitored)
+                        {
+
+                            @if (monitor.SystolicFlag == true)
+                            {
+                                <TableRowCell Class="center">
+                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[^1].SystolicValue</span>
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.BloodPressureRecords[^1].DiastolicValue
+                                </TableRowCell>
+                            }
+                            else if (monitor.DiastolicFlag == true)
+                            {
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.BloodPressureRecords[^1].SystolicValue
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[^1].DiastolicValue</span>
+                                </TableRowCell>
+
+                            }
+                            else
+                            {
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.BloodPressureRecords[^1].SystolicValue
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.BloodPressureRecords[^1].DiastolicValue
+                                </TableRowCell>
+                            }
+
+                            <TableRowCell Class="center">
+                                @monitor.MeasurementList.BloodPressureRecords[^1].Date
+                            </TableRowCell>
+                        }
+                        else
+                        {
+                            <TableRowCell Class="center"></TableRowCell>
+                            <TableRowCell Class="center"></TableRowCell>
+                            <TableRowCell Class="center"></TableRowCell>
+                        }
+
+                        <TableRowCell class="center">
+                            <button class="btn btn-danger btn-sm" @onclick="() => OnRemove.InvokeAsync(monitor.PatientId)">Remove</button>
+                        </TableRowCell>
+
+                    </TableRow>
                 }
             }
         </TableBody>
@@ -78,7 +122,7 @@
     [Parameter]
     public IReadOnlyList<Monitor> Monitors { get; set; }
     [Parameter]
-    public EventCallback<string> OnRemove { get; set; }
+    public EventCallback<Monitor> OnRemove { get; set; }
     [Parameter]
     public EventCallback<Record> OnMonitorRecord { get; set; }
 

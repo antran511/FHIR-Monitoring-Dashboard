@@ -1,4 +1,29 @@
 ﻿@using FIT3077.Shared.Models
+<style>
+    .fas.spinning {
+        animation: spin 1s infinite linear;
+    }
+
+    @@keyframes spin {
+        from {
+            transform: scale(1) rotate(0deg);
+        }
+
+        to {
+            transform: scale(1) rotate(360deg);
+        }
+    }
+
+
+    .fa-left {
+        margin-right: 7px;
+    }
+
+    .btn.search {
+        width: 10rem;
+    }
+
+</style>
     <style>
         .center {
             text-align: center;
@@ -18,8 +43,22 @@
                     <TableRowCell class="center" >
                         @patient.Value.Name
                     </TableRowCell>
-                    <TableRowCell class="center" >
-                        <button class="btn btn-primary btn-sm" @onclick="() => OnAdd.InvokeAsync(patient.Value)">Add</button>
+                    <TableRowCell class="center">
+                        @if (IsLoading)
+                        {
+                            <button class="btn btn-dark btn-sm" disabled><span></span>Loading...</button>
+                        }
+                        else
+                        {
+                            if (@patient.Value.IsMonitored)
+                            {
+                                <button class="btn btn-danger btn-sm disabled">Added</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-primary btn-sm" @onclick="() => OnAdd.InvokeAsync(patient.Value)">Add</button>
+                            }
+                        }
                     </TableRowCell>
                 </TableRow>
             }
@@ -32,5 +71,7 @@
     public IReadOnlyDictionary<string, Patient> Patients { get; set; }
     [Parameter]
     public EventCallback<Patient> OnAdd { get; set; }
-    
+    [Parameter]
+    public bool IsLoading { get; set; }
+
 }
