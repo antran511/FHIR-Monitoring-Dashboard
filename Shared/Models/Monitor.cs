@@ -8,6 +8,10 @@ namespace FIT3077.Shared.Models
         public string PatientName { get; set; }
         public Measurement MeasurementList { get; set; }
 
+        public bool CholFlag { get; set; }
+
+        public bool BloodPressureFlag { get; set; }
+
         public Monitor(string patientId, string patientName)
         {
             this.PatientId = patientId;

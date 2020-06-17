@@ -21,12 +21,24 @@
             {
                 @foreach (var monitor in Monitors)
                 {
-                <TableRow>
-                    <TableRowCell class="center">
-                        @monitor.PatientName
-                    </TableRowCell>
+            <TableRow>
+                <TableRowCell class="center">
+                    @monitor.PatientName
+                </TableRowCell>
 
-                    @if (monitor.MeasurementList.CholesterolRecords.Count > 0)
+                @if (monitor.MeasurementList.CholesterolRecords.Count > 0)
+                {
+                    @if (monitor.CholFlag == true)
+                    {
+                        <TableRowCell Class="center">
+                
+                            <td><span style="color:red">@monitor.MeasurementList.CholesterolRecords[0].Value</span></td>
+                        </TableRowCell>
+                        <TableRowCell Class="center">
+                            @monitor.MeasurementList.CholesterolRecords[0].Date
+                        </TableRowCell>
+                    }
+                    else
                     {
                         <TableRowCell Class="center">
                             @monitor.MeasurementList.CholesterolRecords[0].Value
@@ -35,32 +47,34 @@
                             @monitor.MeasurementList.CholesterolRecords[0].Date
                         </TableRowCell>
                     }
-                    else
-                    {
-                        <TableRowCell Class="center"></TableRowCell>
-                        <TableRowCell Class="center"></TableRowCell>
-                        <TableRowCell Class="center"></TableRowCell>
-                    }
 
-                    @if (monitor.MeasurementList.BloodPressureRecords.Count > 0)
-                    {
-                        <TableRowCell Class="center">
-                            @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
-                        </TableRowCell>
-                        <TableRowCell Class="center">
-                            @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
-                        </TableRowCell>
-                        <TableRowCell Class="center">
-                            @monitor.MeasurementList.BloodPressureRecords[0].Date
-                        </TableRowCell>
-                    }
-                    else
-                    {
-                        <TableRowCell Class="center"></TableRowCell>
-                        <TableRowCell Class="center"></TableRowCell>
-                        <TableRowCell Class="center"></TableRowCell>
-                    }
-                </TableRow>
+                }
+                else
+                {
+                    <TableRowCell Class="center"></TableRowCell>
+                    <TableRowCell Class="center"></TableRowCell>
+                    <TableRowCell Class="center"></TableRowCell>
+                }
+
+                @if (monitor.MeasurementList.BloodPressureRecords.Count > 0)
+                {
+                    <TableRowCell Class="center">
+                        @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
+                    </TableRowCell>
+                    <TableRowCell Class="center">
+                        @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
+                    </TableRowCell>
+                    <TableRowCell Class="center">
+                        @monitor.MeasurementList.BloodPressureRecords[0].Date
+                    </TableRowCell>
+                }
+                else
+                {
+                    <TableRowCell Class="center"></TableRowCell>
+                    <TableRowCell Class="center"></TableRowCell>
+                    <TableRowCell Class="center"></TableRowCell>
+                }
+            </TableRow>
                 }
             }
         </TableBody>
