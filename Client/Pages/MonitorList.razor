@@ -5,15 +5,18 @@
     }
 </style>
 
-    <Table  Striped="true">
+    <Table Narrow="true" Striped="true">
         <TableHeader>
             <TableRow>
-                <TableHeaderCell class="center col-8">Name</TableHeaderCell>
-                <TableHeaderCell class="center col-2">Total Cholesterol</TableHeaderCell>
-                <TableHeaderCell class="center col-8">Time</TableHeaderCell>
-                <TableHeaderCell class="center col-2">Systolic Blood Pressure</TableHeaderCell>
-                <TableHeaderCell class="center col-2">Diastolic Blood Pressure</TableHeaderCell>
-                <TableHeaderCell class="center col-2">Time</TableHeaderCell>
+                <TableHeaderCell class="center">Name</TableHeaderCell>
+                <TableHeaderCell class="center">Monitor</TableHeaderCell>
+                <TableHeaderCell class="center">Cholesterol</TableHeaderCell>
+                <TableHeaderCell class="center">Time</TableHeaderCell>
+                <TableHeaderCell class="center">Monitor</TableHeaderCell>
+                <TableHeaderCell class="center">Systolic</TableHeaderCell>
+                <TableHeaderCell class="center">Diastolic</TableHeaderCell>
+                <TableHeaderCell class="center">Time</TableHeaderCell>
+                <TableHeaderCell class="center">Remove</TableHeaderCell>
             </TableRow>
         </TableHeader>
         <TableBody>
@@ -81,5 +84,7 @@
     </Table>
 @code {
     [Parameter]
-    public List<Monitor> Monitors { get; set; }
+    public IReadOnlyList<Monitor> Monitors { get; set; }
+    [Parameter]
+    public EventCallback<string> OnRemove { get; set; }
 }
