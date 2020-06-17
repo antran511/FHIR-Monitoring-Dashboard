@@ -2,12 +2,10 @@
 
 namespace FIT3077.Shared.Models
 {
-    public class BloodPressureRecord 
+    public class BloodPressureRecord : Record
     {
+        public string SystolicValue { get; set; }
 
-        public Record SystolicRecord { get; set; }
-
-        public Record DiastolicRecord { get; set; }
-        public string Date => SystolicRecord.Date;
+        public string DiastolicValue { get; set; }
     }
 }

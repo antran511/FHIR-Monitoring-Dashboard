@@ -2,15 +2,14 @@
 {
     public class Record
     {
-        public RecordType Type { get; set; }
-        public string Value { get; set; }
         public string Date { get; set; }
+        public bool IsMonitored { get; set; } = true;
 
+
+        public void ChangeIsMonitoredValue()
+        {
+            IsMonitored = !IsMonitored;
+        }
     }
-    public enum RecordType
-    {
-        Cholesterol,
-        DiastolicPressure,
-        SystolicPressure
-    }
+    
 }

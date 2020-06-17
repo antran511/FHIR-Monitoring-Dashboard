@@ -29,12 +29,12 @@
                     @monitor.PatientName
                 </TableRowCell>
                 <TableRowCell class="center">
-                    <Check TValue="bool"></Check>
+                    <Check TValue="bool" Checked="monitor.MeasurementList.CholesterolRecords[0].IsMonitored" CheckedChanged="() => OnMonitorRecord.InvokeAsync(monitor.MeasurementList.CholesterolRecords[0])"></Check>
                 </TableRowCell>
-                @if (monitor.MeasurementList.CholesterolRecords.Count > 0)
+                @if (monitor.MeasurementList.CholesterolRecords.Count > 0 && monitor.MeasurementList.CholesterolRecords[0].IsMonitored)
                 {
                     <TableRowCell Class="center">
-                        @monitor.MeasurementList.CholesterolRecords[0].Value
+                        @monitor.MeasurementList.CholesterolRecords[0].CholesterolValue
                     </TableRowCell>
                     <TableRowCell Class="center">
                         @monitor.MeasurementList.CholesterolRecords[0].Date
@@ -46,18 +46,18 @@
                     <TableRowCell Class="center"></TableRowCell>
                 }
                 <TableRowCell class="center">
-                    <Check TValue="bool"></Check>
+                    <Check TValue="bool" Checked="monitor.MeasurementList.BloodPressureRecords[^1].IsMonitored" CheckedChanged="()=>OnMonitorRecord.InvokeAsync(monitor.MeasurementList.BloodPressureRecords[^1])" ></Check>
                 </TableRowCell>
-                @if (monitor.MeasurementList.BloodPressureRecords.Count > 0)
+                @if (monitor.MeasurementList.BloodPressureRecords.Count > 0 && monitor.MeasurementList.BloodPressureRecords[^1].IsMonitored)
                 {
                     <TableRowCell Class="center">
-                        @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
+                        @monitor.MeasurementList.BloodPressureRecords[^1].SystolicValue
                     </TableRowCell>
                     <TableRowCell Class="center">
-                        @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
+                        @monitor.MeasurementList.BloodPressureRecords[^1].DiastolicValue
                     </TableRowCell>
                     <TableRowCell Class="center">
-                        @monitor.MeasurementList.BloodPressureRecords[0].Date
+                        @monitor.MeasurementList.BloodPressureRecords[^1].Date
                     </TableRowCell>
                 }
                 else
@@ -79,4 +79,7 @@
     public IReadOnlyList<Monitor> Monitors { get; set; }
     [Parameter]
     public EventCallback<string> OnRemove { get; set; }
+    [Parameter]
+    public EventCallback<Record> OnMonitorRecord { get; set; }
+
 }

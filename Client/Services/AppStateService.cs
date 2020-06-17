@@ -52,7 +52,7 @@ namespace FIT3077.Client.Services
             var id = monitor.PatientId;
             var fetchBloodPressureTask = _http.GetFromJsonAsync<List<BloodPressureRecord>>(
                 $"/api/patient/{id}/measurement/blood-pressure");
-            var fetchCholesterolTask = _http.GetFromJsonAsync<List<Record>>(
+            var fetchCholesterolTask = _http.GetFromJsonAsync<List<CholesterolRecord>>(
                 $"/api/patient/{id}/measurement/cholesterol");
             await Task.WhenAll(fetchBloodPressureTask, fetchCholesterolTask);
             var bloodPressureRecords = await fetchBloodPressureTask;
@@ -63,6 +63,12 @@ namespace FIT3077.Client.Services
                 CholesterolRecords = cholesterolRecord
             };
             return measurement;
+        }
+
+        public void ModifyRecordState(Record record)
+        {
+            record.ChangeIsMonitoredValue();
+            NotifyStateChanged();
         }
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
