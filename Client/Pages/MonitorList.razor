@@ -5,15 +5,18 @@
     }
 </style>
 
-    <Table  Striped="true">
+    <Table Narrow="true" Striped="true">
         <TableHeader>
             <TableRow>
-                <TableHeaderCell class="center col-8">Name</TableHeaderCell>
-                <TableHeaderCell class="center col-2">Total Cholesterol</TableHeaderCell>
-                <TableHeaderCell class="center col-8">Time</TableHeaderCell>
-                <TableHeaderCell class="center col-2">Systolic Blood Pressure</TableHeaderCell>
-                <TableHeaderCell class="center col-2">Diastolic Blood Pressure</TableHeaderCell>
-                <TableHeaderCell class="center col-2">Time</TableHeaderCell>
+                <TableHeaderCell class="center">Name</TableHeaderCell>
+                <TableHeaderCell class="center">Monitor</TableHeaderCell>
+                <TableHeaderCell class="center">Cholesterol</TableHeaderCell>
+                <TableHeaderCell class="center">Time</TableHeaderCell>
+                <TableHeaderCell class="center">Monitor</TableHeaderCell>
+                <TableHeaderCell class="center">Systolic</TableHeaderCell>
+                <TableHeaderCell class="center">Diastolic</TableHeaderCell>
+                <TableHeaderCell class="center">Time</TableHeaderCell>
+                <TableHeaderCell class="center">Remove</TableHeaderCell>
             </TableRow>
         </TableHeader>
         <TableBody>
@@ -21,51 +24,59 @@
             {
                 @foreach (var monitor in Monitors)
                 {
-                <TableRow>
-                    <TableRowCell class="center">
-                        @monitor.PatientName
+            <TableRow>
+                <TableRowCell class="center">
+                    @monitor.PatientName
+                </TableRowCell>
+                <TableRowCell class="center">
+                    <Check TValue="bool"></Check>
+                </TableRowCell>
+                @if (monitor.MeasurementList.CholesterolRecords.Count > 0)
+                {
+                    <TableRowCell Class="center">
+                        @monitor.MeasurementList.CholesterolRecords[0].Value
                     </TableRowCell>
-
-                    @if (monitor.MeasurementList.CholesterolRecords.Count > 0)
-                    {
-                        <TableRowCell Class="center">
-                            @monitor.MeasurementList.CholesterolRecords[0].Value
-                        </TableRowCell>
-                        <TableRowCell Class="center">
-                            @monitor.MeasurementList.CholesterolRecords[0].Date
-                        </TableRowCell>
-                    }
-                    else
-                    {
-                        <TableRowCell Class="center"></TableRowCell>
-                        <TableRowCell Class="center"></TableRowCell>
-                        <TableRowCell Class="center"></TableRowCell>
-                    }
-
-                    @if (monitor.MeasurementList.BloodPressureRecords.Count > 0)
-                    {
-                        <TableRowCell Class="center">
-                            @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
-                        </TableRowCell>
-                        <TableRowCell Class="center">
-                            @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
-                        </TableRowCell>
-                        <TableRowCell Class="center">
-                            @monitor.MeasurementList.BloodPressureRecords[0].Date
-                        </TableRowCell>
-                    }
-                    else
-                    {
-                        <TableRowCell Class="center"></TableRowCell>
-                        <TableRowCell Class="center"></TableRowCell>
-                        <TableRowCell Class="center"></TableRowCell>
-                    }
-                </TableRow>
+                    <TableRowCell Class="center">
+                        @monitor.MeasurementList.CholesterolRecords[0].Date
+                    </TableRowCell>
+                }
+                else
+                {
+                    <TableRowCell Class="center"></TableRowCell>
+                    <TableRowCell Class="center"></TableRowCell>
+                }
+                <TableRowCell class="center">
+                    <Check TValue="bool"></Check>
+                </TableRowCell>
+                @if (monitor.MeasurementList.BloodPressureRecords.Count > 0)
+                {
+                    <TableRowCell Class="center">
+                        @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
+                    </TableRowCell>
+                    <TableRowCell Class="center">
+                        @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
+                    </TableRowCell>
+                    <TableRowCell Class="center">
+                        @monitor.MeasurementList.BloodPressureRecords[0].Date
+                    </TableRowCell>
+                }
+                else
+                {
+                    <TableRowCell Class="center"></TableRowCell>
+                    <TableRowCell Class="center"></TableRowCell>
+                    <TableRowCell Class="center"></TableRowCell>
+                }
+                <TableRowCell class="center" >
+                    <button class="btn btn-danger btn-sm" @onclick="() => OnRemove.InvokeAsync(monitor.PatientId)" >Remove</button>
+                </TableRowCell>
+            </TableRow>
                 }
             }
         </TableBody>
     </Table>
 @code {
     [Parameter]
-    public List<Monitor> Monitors { get; set; }
+    public IReadOnlyList<Monitor> Monitors { get; set; }
+    [Parameter]
+    public EventCallback<string> OnRemove { get; set; }
 }

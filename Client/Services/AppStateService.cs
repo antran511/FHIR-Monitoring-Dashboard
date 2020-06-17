@@ -10,8 +10,9 @@ namespace FIT3077.Client.Services
 {
     public class AppStateService
     {
-        public Dashboard Dashboard { get; } = new Dashboard();
-        public IReadOnlyDictionary<string, Patient> Patients { get; private set; }
+        private Dashboard Dashboard { get; } = new Dashboard();
+        public IReadOnlyList<Monitor> Monitors => Dashboard.Monitors;
+        public IReadOnlyDictionary<string, Patient> Patients => Dashboard.Patients;
         public bool SearchInProgress { get; private set; }
 
         public event Action OnChange;
@@ -32,11 +33,17 @@ namespace FIT3077.Client.Services
             NotifyStateChanged();
         }
 
-        public async Task AddToMonitor(Patient patient)
+        public async Task AddToMonitors(Patient patient)
         {
             Monitor monitor = new Monitor(patient.Id, patient.Name);
             monitor.MeasurementList = await FetchMeasurement(monitor);
             Dashboard.RegisterMonitor(monitor);
+            NotifyStateChanged();
+        }
+
+        public void RemoveFromMonitors(string monitorId)
+        {
+            Dashboard.DeregisterMonitor(monitorId);
             NotifyStateChanged();
         }
 

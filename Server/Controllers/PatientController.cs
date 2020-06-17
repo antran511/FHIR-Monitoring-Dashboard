@@ -40,13 +40,13 @@ namespace FIT3077.Server.Controllers
                     {
                         Type = RecordType.SystolicPressure,
                         Value =  ((Quantity)o.Component[1].Value).Value.ToString(),
-                        Date = o.Issued.ToFhirDateTime(),
+                        Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm")
                     };
                     var diastolicRecord = new Record()
                     {
                         Type = RecordType.SystolicPressure,
                         Value = ((Quantity)o.Component[0].Value).Value.ToString(),
-                        Date = o.Issued.ToFhirDateTime(),
+                        Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm")
                     };
                     bloodPressureRecords.Add(new BloodPressureRecord()
                     {
@@ -78,8 +78,8 @@ namespace FIT3077.Server.Controllers
                 var record = new Record()
                 {
                     Type = RecordType.Cholesterol,
-                    Date = o.Issued.ToFhirDateTime(),
-                    Value = ((Quantity)o.Value).Value.ToString()
+                    Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm"),
+                    Value =  ((Quantity)o.Value).Value.ToString()
                 };
                 cholesterolRecords.Add(record);
             }
