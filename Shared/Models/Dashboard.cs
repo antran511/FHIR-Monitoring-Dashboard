@@ -41,29 +41,44 @@ namespace FIT3077.Shared.Models
 
         public void HighBloodPressureFlag()
         {
-            double totalChol = 0.0;
+            double totalSystolic = 0.0;
+            double totalDiastolic = 0.0;
             for (int i = 0; i < Monitors.Count; i++)
             {
-                var monitor = Monitors[i].MeasurementList.CholesterolRecords[0].Value;
-                var val = Convert.ToDouble(monitor);
-                totalChol += val;
+                var systolic = Monitors[i].MeasurementList.BloodPressureRecords[0].SystolicRecord.Value;
+                var systolicVal = Convert.ToDouble(systolic);
+
+                var diastolic = Monitors[i].MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value;
+                var diastolicVal = Convert.ToDouble(diastolic);
+
+                totalSystolic += systolicVal;
+                totalDiastolic += diastolicVal;
             }
 
-            var averageChol = totalChol / Monitors.Count;
+            var averageSystolic = totalSystolic / Monitors.Count;
+            var averageDiastolic = totalDiastolic / Monitors.Count;
             foreach (var t in Monitors)
             {
-                var val = Convert.ToDouble(t.MeasurementList.CholesterolRecords[0].Value);
-                if (val > averageChol)
+                var systolicVal = Convert.ToDouble(t.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value);
+                var diastolicVal = Convert.ToDouble(t.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value);
+                if (systolicVal > averageSystolic)
                 {
-                    t.CholFlag = true;
+                    t.SystolicFlag = true;
+                }
+                if (diastolicVal > averageDiastolic)
+                {
+                    t.DiastolicFlag = true;
                 }
             }
 
         }
 
+
         public void DeregisterMonitor(string monitorId)
         {
             Monitors?.Remove(Monitors.SingleOrDefault(m => m.PatientId == monitorId));
+            HighCholFlag();
+            HighBloodPressureFlag();
         }
     }
 }

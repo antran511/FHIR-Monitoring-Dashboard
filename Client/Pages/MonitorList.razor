@@ -38,7 +38,7 @@
                             @if (monitor.CholFlag == true)
                             {
                                 <TableRowCell Class="center">
-                                    <td><span style="color:red">@monitor.MeasurementList.CholesterolRecords[0].Value</span></td>
+                                    <span style="color:red">@monitor.MeasurementList.CholesterolRecords[0].Value</span>
                                 </TableRowCell>
                                 <TableRowCell Class="center">
                                     @monitor.MeasurementList.CholesterolRecords[0].Date
@@ -62,14 +62,42 @@
                             <TableRowCell Class="center"></TableRowCell>
                         }
 
+                        <TableRowCell class="center">
+                            <Check TValue="bool"></Check>
+                        </TableRowCell>
+
                         @if (monitor.MeasurementList.BloodPressureRecords.Count > 0)
                         {
-                            <TableRowCell Class="center">
-                                @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
-                            </TableRowCell>
-                            <TableRowCell Class="center">
-                                @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
-                            </TableRowCell>
+
+                            @if (monitor.SystolicFlag == true)
+                            {
+                                <TableRowCell Class="center">
+                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value</span>
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
+                                </TableRowCell>
+                            }
+                            else if (monitor.DiastolicFlag == true)
+                            {
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value</span>
+                                </TableRowCell>
+
+                            }
+                            else
+                            {
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    @monitor.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value
+                                </TableRowCell>
+                            }
+
                             <TableRowCell Class="center">
                                 @monitor.MeasurementList.BloodPressureRecords[0].Date
                             </TableRowCell>
