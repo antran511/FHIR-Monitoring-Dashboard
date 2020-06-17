@@ -23,7 +23,7 @@ namespace FIT3077.Shared.Models
             double totalChol = 0.0;
             for (int i = 0; i < Monitors.Count; i++)
             {
-                var monitor = Monitors[i].MeasurementList.CholesterolRecords[0].Value;
+                var monitor = Monitors[i].MeasurementList.CholesterolRecords[0].CholesterolValue;
                 var val = Convert.ToDouble(monitor);
                 totalChol += val;
             }
@@ -31,7 +31,7 @@ namespace FIT3077.Shared.Models
             var averageChol = totalChol / Monitors.Count;
             foreach(var t in Monitors)
             {
-                var val = Convert.ToDouble(t.MeasurementList.CholesterolRecords[0].Value);
+                var val = Convert.ToDouble(t.MeasurementList.CholesterolRecords[0].CholesterolValue);
                 if (val > averageChol)
                 {
                     t.CholFlag = true;
@@ -45,10 +45,10 @@ namespace FIT3077.Shared.Models
             double totalDiastolic = 0.0;
             for (int i = 0; i < Monitors.Count; i++)
             {
-                var systolic = Monitors[i].MeasurementList.BloodPressureRecords[0].SystolicRecord.Value;
+                var systolic = Monitors[i].MeasurementList.BloodPressureRecords[0].SystolicValue;
                 var systolicVal = Convert.ToDouble(systolic);
 
-                var diastolic = Monitors[i].MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value;
+                var diastolic = Monitors[i].MeasurementList.BloodPressureRecords[0].DiastolicValue;
                 var diastolicVal = Convert.ToDouble(diastolic);
 
                 totalSystolic += systolicVal;
@@ -59,8 +59,8 @@ namespace FIT3077.Shared.Models
             var averageDiastolic = totalDiastolic / Monitors.Count;
             foreach (var t in Monitors)
             {
-                var systolicVal = Convert.ToDouble(t.MeasurementList.BloodPressureRecords[0].SystolicRecord.Value);
-                var diastolicVal = Convert.ToDouble(t.MeasurementList.BloodPressureRecords[0].DiastolicRecord.Value);
+                var systolicVal = Convert.ToDouble(t.MeasurementList.BloodPressureRecords[0].SystolicValue);
+                var diastolicVal = Convert.ToDouble(t.MeasurementList.BloodPressureRecords[0].DiastolicValue);
                 if (systolicVal > averageSystolic)
                 {
                     t.SystolicFlag = true;
