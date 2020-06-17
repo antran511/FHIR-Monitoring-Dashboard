@@ -59,7 +59,6 @@
                         {
                             <TableRowCell Class="center"></TableRowCell>
                             <TableRowCell Class="center"></TableRowCell>
-                            <TableRowCell Class="center"></TableRowCell>
                         }
 
                         <TableRowCell class="center">
@@ -110,7 +109,7 @@
                         }
 
                         <TableRowCell class="center">
-                            <button class="btn btn-danger btn-sm" @onclick="() => OnRemove.InvokeAsync(monitor.PatientId)">Remove</button>
+                            <button class="btn btn-danger btn-sm" @onclick="() => OnRemove.InvokeAsync(monitor)">Remove</button>
                         </TableRowCell>
 
                     </TableRow>
@@ -125,5 +124,7 @@
     public EventCallback<Monitor> OnRemove { get; set; }
     [Parameter]
     public EventCallback<Record> OnMonitorRecord { get; set; }
+    
 
+    
 }
