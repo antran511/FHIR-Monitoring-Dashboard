@@ -2,6 +2,8 @@
 @using FIT3077.Client.Services
 @inject AppStateService State
 @using BlazorStyled.Stylesheets
+@implements IDisposable
+
 <style>
     .card_header {
         display: flex;
@@ -11,21 +13,20 @@
         background-color: #394263;
         color: #FFF;
     }
-
 </style>
 <div class="top-row">
     <Submission OnSearch="State.Search" IsSearching="State.SearchInProgress"></Submission>
 </div>
 <div>
     <div class="fluid-container py-4">
-        <div class="row" >
-            <div class="col-3" >
+        <div class="row">
+            <div class="col-3">
                 <div class="bg-light" style="height: 350px;">
                     <div class="card_header">
                         <div class="pl-2">Patient List</div>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <PatientList Patients="State.Patients" OnAdd="State.AddToMonitors"></PatientList>
+                        <PatientList Patients="State.Patients" OnAdd="State.AddToMonitors" ></PatientList>
                     </div>
 
                 </div>
@@ -36,7 +37,7 @@
                         <div class="pl-2">Monitor List</div>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <MonitorList Monitors="State.Monitors" OnRemove="State.RemoveFromMonitors"></MonitorList>
+                        <MonitorList Monitors="State.Monitors" OnRemove="State.RemoveFromMonitors" OnMonitorRecord="State.ModifyRecordState"></MonitorList>
                     </div>
                 </div>
             </div>
@@ -50,5 +51,8 @@
     {
         State.OnChange += StateHasChanged;
     }
-
+    public void Dispose()
+    {
+        State.OnChange -= StateHasChanged;
+    }
 }

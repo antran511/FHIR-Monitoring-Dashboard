@@ -123,4 +123,7 @@
     public IReadOnlyList<Monitor> Monitors { get; set; }
     [Parameter]
     public EventCallback<string> OnRemove { get; set; }
+    [Parameter]
+    public EventCallback<Record> OnMonitorRecord { get; set; }
+
 }

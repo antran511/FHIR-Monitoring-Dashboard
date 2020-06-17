@@ -36,22 +36,11 @@ namespace FIT3077.Server.Controllers
                 foreach (var entry in entryList)
                 {
                     Observation o = (Observation) entry.Resource;
-                    var systolicRecord = new Record()
-                    {
-                        Type = RecordType.SystolicPressure,
-                        Value =  ((Quantity)o.Component[1].Value).Value.ToString(),
-                        Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm")
-                    };
-                    var diastolicRecord = new Record()
-                    {
-                        Type = RecordType.SystolicPressure,
-                        Value = ((Quantity)o.Component[0].Value).Value.ToString(),
-                        Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm")
-                    };
                     bloodPressureRecords.Add(new BloodPressureRecord()
                     {
-                        SystolicRecord = systolicRecord,
-                        DiastolicRecord = diastolicRecord
+                        DiastolicValue = ((Quantity)o.Component[0].Value).Value.ToString(),
+                        SystolicValue = ((Quantity)o.Component[1].Value).Value.ToString(),
+                        Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm")
                     });
                 };
             }
@@ -62,7 +51,7 @@ namespace FIT3077.Server.Controllers
         }
         [HttpGet("{id}/measurement/cholesterol")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<List<Record>> FetchCholesterol(string id)
+        public async Task<List<CholesterolRecord>> FetchCholesterol(string id)
         {
             //Create search parameters
             var q = new SearchParams().Where("patient=" + id).Where("code=2093-3").OrderBy("-date");
@@ -70,16 +59,15 @@ namespace FIT3077.Server.Controllers
             q.Count = 1;
             //Search result using parameters above
             Bundle result = await _client.SearchAsync<Observation>(q);
-            var cholesterolRecords = new List<Record>();
+            var cholesterolRecords = new List<CholesterolRecord>();
             if (result.Total > 0)
             {
                 Bundle.EntryComponent e = (Bundle.EntryComponent)result.Entry[0];
                 Observation o = (Observation)e.Resource;
-                var record = new Record()
+                var record = new CholesterolRecord()
                 {
-                    Type = RecordType.Cholesterol,
-                    Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm"),
-                    Value =  ((Quantity)o.Value).Value.ToString()
+                    CholesterolValue = ((Quantity)o.Value).Value.ToString(),
+                    Date = DateTime.Parse(o.Issued.ToFhirDateTime()).ToString("dd/MM/yyyy HH:mm")
                 };
                 cholesterolRecords.Add(record);
             }
