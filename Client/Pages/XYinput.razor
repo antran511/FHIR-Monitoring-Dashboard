@@ -1,0 +1,17 @@
+﻿@using FIT3077.Shared.Models;
+
+<h3>Component</h3>
+
+<div>
+    <EditForm Model="@ValueX" class="input-group">
+        <InputNumber class="px-2" id="X" placeholder="" @bind-Value="ValueX" />
+        <InputNumber class="px-2" id="Y" placeholder="" @bind-Value="ValueX" />
+    </EditForm>
+
+</div>
+@code {
+    public String ValueX { get; set; }
+    public String ValueY { get; set; }
+
+    public IList<Monitor>
+}

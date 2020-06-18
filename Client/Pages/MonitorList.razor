@@ -59,47 +59,46 @@
                         {
                             <TableRowCell Class="center"></TableRowCell>
                             <TableRowCell Class="center"></TableRowCell>
-                            <TableRowCell Class="center"></TableRowCell>
                         }
 
                         <TableRowCell class="center">
-                            <Check TValue="bool" Checked="monitor.MeasurementList.BloodPressureRecords[^1].IsMonitored" CheckedChanged="()=>OnMonitorRecord.InvokeAsync(monitor.MeasurementList.BloodPressureRecords[^1])"></Check>
+                            <Check TValue="bool" Checked="monitor.MeasurementList.BloodPressureRecords[0].IsMonitored" CheckedChanged="()=>OnMonitorRecord.InvokeAsync(monitor.MeasurementList.BloodPressureRecords[0])"></Check>
                         </TableRowCell>
 
-                        @if (monitor.MeasurementList.BloodPressureRecords.Count > 0 && monitor.MeasurementList.BloodPressureRecords[^1].IsMonitored)
+                        @if (monitor.MeasurementList.BloodPressureRecords.Count > 0 && monitor.MeasurementList.BloodPressureRecords[0].IsMonitored)
                         {
 
                             @if (monitor.SystolicFlag == true)
                             {
                                 <TableRowCell Class="center">
-                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[^1].SystolicValue</span>
+                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[0].SystolicValue</span>
                                 </TableRowCell>
                                 <TableRowCell Class="center">
-                                    @monitor.MeasurementList.BloodPressureRecords[^1].DiastolicValue
+                                    @monitor.MeasurementList.BloodPressureRecords[0].DiastolicValue
                                 </TableRowCell>
                             }
                             else if (monitor.DiastolicFlag == true)
                             {
                                 <TableRowCell Class="center">
-                                    @monitor.MeasurementList.BloodPressureRecords[^1].SystolicValue
+                                    @monitor.MeasurementList.BloodPressureRecords[0].SystolicValue
                                 </TableRowCell>
                                 <TableRowCell Class="center">
-                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[^1].DiastolicValue</span>
+                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[0].DiastolicValue</span>
                                 </TableRowCell>
 
                             }
                             else
                             {
                                 <TableRowCell Class="center">
-                                    @monitor.MeasurementList.BloodPressureRecords[^1].SystolicValue
+                                    @monitor.MeasurementList.BloodPressureRecords[0].SystolicValue
                                 </TableRowCell>
                                 <TableRowCell Class="center">
-                                    @monitor.MeasurementList.BloodPressureRecords[^1].DiastolicValue
+                                    @monitor.MeasurementList.BloodPressureRecords[0].DiastolicValue
                                 </TableRowCell>
                             }
 
                             <TableRowCell Class="center">
-                                @monitor.MeasurementList.BloodPressureRecords[^1].Date
+                                @monitor.MeasurementList.BloodPressureRecords[0].Date
                             </TableRowCell>
                         }
                         else
@@ -110,7 +109,7 @@
                         }
 
                         <TableRowCell class="center">
-                            <button class="btn btn-danger btn-sm" @onclick="() => OnRemove.InvokeAsync(monitor.PatientId)">Remove</button>
+                            <button class="btn btn-danger btn-sm" @onclick="() => OnRemove.InvokeAsync(monitor)">Remove</button>
                         </TableRowCell>
 
                     </TableRow>

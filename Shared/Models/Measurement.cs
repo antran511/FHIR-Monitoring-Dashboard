@@ -7,6 +7,10 @@ namespace FIT3077.Shared.Models
         public List<BloodPressureRecord> BloodPressureRecords { get; set; }
         public List<CholesterolRecord> CholesterolRecords { get; set; }
 
+        public int ValueX { get; set; }
+
+        public int ValueY { get; set; }
+
     }
 
     

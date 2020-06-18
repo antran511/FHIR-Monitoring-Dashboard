@@ -29,7 +29,7 @@ namespace FIT3077.Client.Services
             NotifyStateChanged();
 
             Dashboard.Patients = await _http.GetFromJsonAsync<Dictionary<string, Patient>>($"/api/practitioner/{value}");
-            Dashboard.Monitors.Clear();
+            Dashboard.Monitors?.Clear();
             SearchInProgress = false;
             NotifyStateChanged();
         }

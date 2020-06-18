@@ -36,6 +36,10 @@ namespace FIT3077.Shared.Models
                 {
                     t.CholFlag = true;
                 }
+                else
+                {
+                    t.CholFlag = false;
+                }
             }
         }
 
@@ -65,9 +69,17 @@ namespace FIT3077.Shared.Models
                 {
                     t.SystolicFlag = true;
                 }
+                else
+                {
+                    t.SystolicFlag = false;
+                }
                 if (diastolicVal > averageDiastolic)
                 {
                     t.DiastolicFlag = true;
+                }
+                else
+                {
+                    t.DiastolicFlag = false;
                 }
             }
 
