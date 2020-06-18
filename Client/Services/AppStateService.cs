@@ -14,8 +14,9 @@ namespace FIT3077.Client.Services
         public IReadOnlyList<Monitor> Monitors => Dashboard.Monitors;
         public IReadOnlyDictionary<string, Patient> Patients => Dashboard.Patients;
         public bool SearchInProgress { get; private set; }
-
+        public int CurrentInterval { get; private set; } = 5000;
         public event Action OnChange;
+        public System.Timers.Timer t;
 
         private readonly HttpClient _http;
         public AppStateService(HttpClient httpClient)
@@ -77,6 +78,32 @@ namespace FIT3077.Client.Services
             record.ChangeIsMonitoredValue();
             NotifyStateChanged();
         }
+
+        public async Task Update()
+        {
+            if (Dashboard.Monitors != null && Dashboard.Monitors.Count > 1)
+            {
+                foreach (var m in Dashboard.Monitors)
+                {
+                    m.MeasurementList = await FetchMeasurement(m);
+                }
+                NotifyStateChanged();
+            } 
+        }
+        public void SetTime(string value)
+        {
+            try
+            {
+                t.Interval = 1000 * 60 * int.Parse(value);
+            }
+            catch (InvalidCastException e)
+            {
+                Console.WriteLine("Value must be an integer");
+                throw;
+            }
+        }
+
+       
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
 }

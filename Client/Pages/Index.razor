@@ -23,7 +23,7 @@
             <div class="col-3">
                 <div class="bg-light" style="height: 350px;">
                     <div class="card_header">
-                        <div class="pl-2">Patient List</div>
+                        <div class="pl-3"><strong>Patient List</strong></div>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
                         <PatientList Patients="State.Patients" OnAdd="State.AddToMonitors" IsLoading="State.SearchInProgress"></PatientList>
@@ -33,11 +33,15 @@
             </div>
             <div class="col-9 rounded">
                 <div class="bg-light" style=" height: 350px;">
-                    <div class="card_header">
-                        <div class="pl-2">Monitor List</div>
+                    <div class="card_header">   
+                        <div class="pl-3"><strong>Monitor List</strong>
+                        </div>
+                        <IntervalTimeSetting OnSetTime="State.SetTime"></IntervalTimeSetting>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <MonitorList Monitors="State.Monitors" OnRemove="State.RemoveFromMonitors" OnMonitorRecord="State.ModifyRecordState"></MonitorList>
+                        <MonitorList Monitors="State.Monitors" OnRemove="State.RemoveFromMonitors" OnMonitorRecord="State.ModifyRecordState" >
+
+                        </MonitorList>
                     </div>
                 </div>
             </div>
@@ -47,12 +51,24 @@
 
 @code{
 
+
     protected override void OnInitialized()
     {
+        //Create timer for interval update
+        State.t = new System.Timers.Timer();
+        State.t.Elapsed += async (s, e) =>
+        {
+            await State.Update();
+        };
+        State.t.Interval = 1000 * 60 * 5;
+        State.t.Start();
+        //Subscribe to the services
         State.OnChange += StateHasChanged;
     }
+
     public void Dispose()
     {
         State.OnChange -= StateHasChanged;
     }
+
 }
