@@ -68,7 +68,16 @@
                         @if (monitor.MeasurementList.BloodPressureRecords.Count > 0 && monitor.MeasurementList.BloodPressureRecords[0].IsMonitored)
                         {
 
-                            @if (monitor.SystolicFlag == true)
+                            @if (monitor.SystolicFlag == true && monitor.DiastolicFlag == true)
+                            {
+                                <TableRowCell Class="center">
+                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[0].SystolicValue</span>
+                                </TableRowCell>
+                                <TableRowCell Class="center">
+                                    <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[0].DiastolicValue</span>
+                                </TableRowCell>
+                            }
+                            else if (monitor.SystolicFlag == true)
                             {
                                 <TableRowCell Class="center">
                                     <span style="color:red">@monitor.MeasurementList.BloodPressureRecords[0].SystolicValue</span>

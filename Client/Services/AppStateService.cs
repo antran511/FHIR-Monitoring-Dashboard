@@ -18,6 +18,9 @@ namespace FIT3077.Client.Services
         public event Action OnChange;
         public System.Timers.Timer t;
 
+        public int X;
+        public int y;
+
         private readonly HttpClient _http;
         public AppStateService(HttpClient httpClient)
         {
@@ -103,6 +106,12 @@ namespace FIT3077.Client.Services
             }
         }
 
+        public void ProcessHighBloodInput(SysDiastolicThreshold highBloodValues)
+        {
+            Dashboard.SysDiastolicValues = highBloodValues;
+            Dashboard.HighBloodPressureFlag();
+            NotifyStateChanged();
+        }
        
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
