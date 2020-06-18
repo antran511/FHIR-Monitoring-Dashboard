@@ -4,7 +4,7 @@
 {
     @foreach (var m in Monitors)
     {
-        if (m.SystolicFlag == true && m.MeasurementList.BloodPressureRecords.IsMonitored == true)
+        if (m.SystolicFlag == true && m.MeasurementList.BloodPressureRecords[0].IsMonitored == true)
         {
             <SystolicPressureChart Monitor="m"></SystolicPressureChart>
         }
