@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BlazorStyled" Version="2.2.0" />
+    <PackageReference Include="Blazorise.Charts" Version="0.9.0.3" />
+    <PackageReference Include="BlazorStyled" Version="3.0.0" />
     <PackageReference Include="Hl7.Fhir.R4" Version="1.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0" />
   </ItemGroup>

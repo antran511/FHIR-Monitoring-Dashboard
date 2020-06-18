@@ -1,7 +1,6 @@
 ﻿@page "/"
 @using FIT3077.Client.Services
 @inject AppStateService State
-@using BlazorStyled.Stylesheets
 @implements IDisposable
 
 <style>
@@ -18,7 +17,7 @@
     <Submission OnSearch="State.Search" IsSearching="State.SearchInProgress"></Submission>
 </div>
 <div>
-    <div class="fluid-container py-4">
+    <div class="container-fluid py-4">
         <div class="row">
             <div class="col-3">
                 <div class="bg-light" style="height: 350px;">
@@ -31,21 +30,38 @@
 
                 </div>
             </div>
-            <div class="col-9 rounded">
+            <div class="col-9 ">
                 <div class="bg-light" style=" height: 350px;">
-                    <div class="card_header">   
-                        <div class="pl-3"><strong>Monitor List</strong>
+                    <div class="card_header">
+                        <div class="pl-3">
+                            <strong>Monitor List</strong>
                         </div>
                         <IntervalTimeSetting OnSetTime="State.SetTime"></IntervalTimeSetting>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <MonitorList Monitors="State.Monitors" OnRemove="State.RemoveFromMonitors" OnMonitorRecord="State.ModifyRecordState" >
-
+                        <MonitorList Monitors="State.Monitors" OnRemove="State.RemoveFromMonitors" OnMonitorRecord="State.ModifyRecordState">
                         </MonitorList>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <div class="bg-light" style="height: 350px;">
+                    <div class="card_header">
+                        <div class="pl-3"><strong>High Systolic Chart</strong></div>
+                    </div>
+                    <div class="bg-light d-flex flex" style="overflow-x: auto; max-height:300px ; max-width: 573.67px">
+                        <HighBloodPressure Monitors="State.Monitors"></HighBloodPressure>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+
     </div>
 </div>
 
