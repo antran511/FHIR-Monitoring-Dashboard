@@ -4,9 +4,11 @@ namespace FIT3077.Shared.Models
 {
     public class Measurement
     {
-        public List<BloodPressureRecord> BloodPressureRecords { get; set; }
-        public List<CholesterolRecord> CholesterolRecords { get; set; }
+        public BloodPressureList BloodPressureRecords { get; set; }
+        public CholesterolList CholesterolRecords { get; set; }
+    
 
+       
     }
 
     

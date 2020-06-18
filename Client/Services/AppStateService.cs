@@ -18,9 +18,6 @@ namespace FIT3077.Client.Services
         public event Action OnChange;
         public System.Timers.Timer t;
 
-        public int X;
-        public int y;
-
         private readonly HttpClient _http;
         public AppStateService(HttpClient httpClient)
         {
@@ -70,15 +67,15 @@ namespace FIT3077.Client.Services
             var cholesterolRecord = await fetchCholesterolTask;
             var measurement = new Measurement()
             {
-                BloodPressureRecords = bloodPressureRecords,
-                CholesterolRecords = cholesterolRecord
+                BloodPressureRecords = new BloodPressureList() { Records = bloodPressureRecords },
+                CholesterolRecords = new CholesterolList() { Records = cholesterolRecord }
             };
             return measurement;
         }
 
-        public void ModifyRecordState(Record record)
+        public void ModifyRecordState(RecordList recordList)
         {
-            record.ChangeIsMonitoredValue();
+            recordList.ChangeMonitoredState();
             NotifyStateChanged();
         }
 
@@ -108,8 +105,7 @@ namespace FIT3077.Client.Services
 
         public void ProcessHighBloodInput(SysDiastolicThreshold highBloodValues)
         {
-            Dashboard.SysDiastolicValues = highBloodValues;
-            Dashboard.HighBloodPressureFlag();
+            Dashboard.HighBloodPressureFlag(highBloodValues);
             NotifyStateChanged();
         }
        

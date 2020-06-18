@@ -10,22 +10,22 @@ namespace FIT3077.Shared.Models
         public Dictionary<string, Patient> Patients { get; set; }
         public List<Monitor> Monitors { get; set; }
 
-        public SysDiastolicThreshold SysDiastolicValues { get; set; }
+        private SysDiastolicThreshold SysDiastolicValues { get; set; } = new SysDiastolicThreshold();
 
         public void RegisterMonitor(Monitor monitor)
         {
             Monitors ??= new List<Monitor>();
             Monitors.Add(monitor);
             HighCholFlag();
-            HighBloodPressureFlag();
+            HighBloodPressureFlag(SysDiastolicValues);
         }
 
         public void HighCholFlag()
         {
             double totalChol = 0.0;
-            for (int i = 0; i < Monitors.Count; i++)
+            foreach (var m in Monitors)
             {
-                var monitor = Monitors[i].MeasurementList.CholesterolRecords[0].CholesterolValue;
+                var monitor = m.MeasurementList.CholesterolRecords.Records[0].CholesterolValue;
                 var val = Convert.ToDouble(monitor);
                 totalChol += val;
             }
@@ -33,43 +33,23 @@ namespace FIT3077.Shared.Models
             var averageChol = totalChol / Monitors.Count;
             foreach(var t in Monitors)
             {
-                var val = Convert.ToDouble(t.MeasurementList.CholesterolRecords[0].CholesterolValue);
-                if (val > averageChol)
-                {
-                    t.CholFlag = true;
-                }
-                else
-                {
-                    t.CholFlag = false;
-                }
+                var val = Convert.ToDouble(t.MeasurementList.CholesterolRecords.Records[0].CholesterolValue);
+                t.CholFlag = val > averageChol;
             }
         }
 
-        public void HighBloodPressureFlag()
+        public void HighBloodPressureFlag(SysDiastolicThreshold highBloodValues)
         {
+            SysDiastolicValues = highBloodValues;
             var systolicValue = SysDiastolicValues.Systolic;
             var diastolicValue = SysDiastolicValues.Diastolic;
 
             foreach (var t in Monitors)
             {
-                var systolicMonitor = int.Parse(t.MeasurementList.BloodPressureRecords[0].SystolicValue);
-                var diastolicMonitor = int.Parse(t.MeasurementList.BloodPressureRecords[0].DiastolicValue);
-                if (systolicMonitor > systolicValue)
-                {
-                    t.SystolicFlag = true;
-                }
-                else
-                {
-                    t.SystolicFlag = false;
-                }
-                if (diastolicMonitor > diastolicValue)
-                {
-                    t.DiastolicFlag = true;
-                }
-                else
-                {
-                    t.DiastolicFlag = false;
-                }
+                var systolicMonitor = int.Parse(t.MeasurementList.BloodPressureRecords.Records[0].SystolicValue);
+                var diastolicMonitor = int.Parse(t.MeasurementList.BloodPressureRecords.Records[0].DiastolicValue);
+                t.SystolicFlag = systolicMonitor > systolicValue;
+                t.DiastolicFlag = diastolicMonitor > diastolicValue;
             }
             
         }

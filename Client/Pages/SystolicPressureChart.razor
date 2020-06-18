@@ -53,11 +53,11 @@
     List<double> RetrieveData()
     {
         dataSet = new List<double>();
-        foreach (var v in Monitor.MeasurementList.BloodPressureRecords)
+        foreach (var v in Monitor.MeasurementList.BloodPressureRecords.Records)
         {
             dataSet.Add(int.Parse(v.SystolicValue));
         }
-
+        dataSet.Reverse();
         return dataSet;
-    } 
+    }
 }
