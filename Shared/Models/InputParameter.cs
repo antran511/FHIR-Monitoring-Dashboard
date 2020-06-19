@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FIT3077.Shared.Models
 {
-    public class SearchParameter
+    public class InputParameter
     {
         public string Value { get; set; }
     }

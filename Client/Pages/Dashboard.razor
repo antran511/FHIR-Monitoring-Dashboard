@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using FIT3077.Client.Services
-@inject AppStateService State
+@inject IDashboardService DashboardService
 @implements IDisposable
 
 <style>
@@ -14,8 +14,8 @@
     }
 </style>
 <div class="top-row" style="justify-content: space-between;position: relative">
-    <ThresholdSubmission OnClickHighBloodPressure="State.ProcessHighBloodInput"></ThresholdSubmission>
-    <Submission OnSearch="State.Search" IsSearching="State.SearchInProgress"></Submission>
+    <ThresholdSubmission OnClickHighBloodPressure="DashboardService.ProcessHighBloodInput"></ThresholdSubmission>
+    <Submission OnSearch="DashboardService.Search" IsSearching="DashboardService.SearchInProgress"></Submission>
 </div>
 
 <div>
@@ -27,7 +27,7 @@
                         <div class="pl-3"><strong>Patient List</strong></div>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <PatientList Patients="State.Patients" OnAdd="State.AddToMonitors" IsLoading="State.SearchInProgress"></PatientList>
+                        <PatientList Patients="DashboardService.Patients" OnAdd="DashboardService.AddToMonitors" IsLoading="DashboardService.SearchInProgress"></PatientList>
                     </div>
 
                 </div>
@@ -38,57 +38,53 @@
                         <div class="pl-3">
                             <strong>Monitor List</strong>
                         </div>
-                        <IntervalTimeSetting OnSetTime="State.SetTime"></IntervalTimeSetting>
+                        <IntervalTimeSetting OnSetTime="DashboardService.SetTime"></IntervalTimeSetting>
                     </div>
                     <div class="bg-light" style="overflow-y: auto; height:300px">
-                        <MonitorList Monitors="State.Monitors" OnRemove="State.RemoveFromMonitors" OnMonitorRecord="State.ModifyRecordState">
+                        <MonitorList Monitors="DashboardService.Monitors" OnRemove="DashboardService.RemoveFromMonitors" OnMonitorRecord="DashboardService.ModifyRecordState">
                         </MonitorList>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
         <div class="row">
             <div class="col-6">
+                <div class="bg-light" style="height: 350px;">
+                    <div class="card_header">
+                        <div class="pl-3"><strong>Total Cholesterol Chart</strong></div>
+                    </div>
+                    <div class="bg-light" style="overflow-x: auto; max-height: 300px; max-width: 573.67px; margin: auto;">
+                        <TotalCholesterolChart Monitors="DashboardService.Monitors"></TotalCholesterolChart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="bg-light" style="height: 350px;">
+                    <div  class="card_header">
+                        <div class="pl-3"><strong>High Systolic Blood Pressure Patients</strong></div>
+                    </div>
+                    <div><HighSystolicObservationList Monitors="DashboardService.Monitors"></HighSystolicObservationList></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
                 <div class="bg-light" style="height: 350px;">
                     <div class="card_header">
                         <div class="pl-3"><strong>High Systolic Chart</strong></div>
                     </div>
-                    <div class="bg-light d-flex flex" style="overflow-x: auto; max-height:300px ; max-width: 573.67px">
-                        <HighBloodPressure Monitors="State.Monitors"></HighBloodPressure>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-6">
-                <div class="bg-light" style="height: 350px;">
-                    <div class="card_header">
-                        <div class="pl-3"><strong>Cholesterol Chart</strong></div>
-                    </div>
-                    <div class="bg-light d-flex flex" style="overflow-x: auto; max-height:300px ; max-width: 573.67px">
-                        <TotalCholesterolChart Monitors="State.Monitors"></TotalCholesterolChart>
+                    <div class="bg-light d-flex flex" style="overflow-x: auto;max-width:1493.18px">
+                        <HighSystolicChart Monitors="DashboardService.Monitors"></HighSystolicChart>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-6">
-                <div style="height: 350px;">
-                    <div class="card_header">
-                        <div class="pl-3"><strong>High Systolic Blood Pressure Patients</strong></div>
-                    </div>
-                    <div><HighSystolicObservations Monitors="State.Monitors"></HighSystolicObservations></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>
 
 @code{
@@ -97,20 +93,20 @@
     protected override void OnInitialized()
     {
         //Create timer for interval update
-        State.t = new System.Timers.Timer();
-        State.t.Elapsed += async (s, e) =>
+        DashboardService.t = new System.Timers.Timer();
+        DashboardService.t.Elapsed += async (s, e) =>
         {
-            await State.Update();
+            await DashboardService.Update();
         };
-        State.t.Interval = 1000 * 60 * 5;
-        State.t.Start();
+        DashboardService.t.Interval = 1000 * 60 * 5;
+        DashboardService.t.Start();
         //Subscribe to the services
-        State.OnChange += StateHasChanged;
+        DashboardService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        State.OnChange -= StateHasChanged;
+        DashboardService.OnChange -= StateHasChanged;
     }
 
 }

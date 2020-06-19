@@ -8,7 +8,6 @@ namespace FIT3077.Shared.Models
         public CholesterolList CholesterolRecords { get; set; }
     
 
-       
     }
 
     

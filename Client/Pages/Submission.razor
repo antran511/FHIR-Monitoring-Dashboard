@@ -34,7 +34,7 @@
             }
             else
             {
-                <button class="btn btn-dark " @onclick="() => OnSearch.InvokeAsync(parameter.Value)">Search</button>
+                <button class="btn btn-dark " @onclick="() => OnSearch.InvokeAsync(parameter)">Search</button>
             }
         </div>
     </EditForm>
@@ -42,12 +42,12 @@
 </div>
 @code {
     [Parameter]
-    public EventCallback<string> OnSearch { get; set; }
+    public EventCallback<InputParameter> OnSearch { get; set; }
 
     [Parameter]
     public bool IsSearching { get; set; }
 
-    private SearchParameter parameter = new SearchParameter();
+    private InputParameter parameter = new InputParameter();
 
 
 

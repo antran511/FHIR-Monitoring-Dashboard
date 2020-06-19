@@ -12,7 +12,7 @@
     public Monitor Monitor { get; set; }
 
     LineChart<double> lineChart;
-    List<double> dataSet;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -40,19 +40,19 @@
             Data = RetrieveData(),
             BackgroundColor = backgroundColors,
             BorderColor = borderColors,
-            Fill = true,
+            Fill = false,
             PointRadius = 2,
             BorderDash = new List<int> { }
         };
     }
 
     string[] Labels = { "1", "2", "3", "4", "5" };
-    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
-    List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
+    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+    List<string> borderColors = new List<string> { ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
 
     List<double> RetrieveData()
     {
-        dataSet = new List<double>();
+        var dataSet = new List<double>();
         foreach (var v in Monitor.MeasurementList.BloodPressureRecords.Records)
         {
             dataSet.Add(int.Parse(v.SystolicValue));

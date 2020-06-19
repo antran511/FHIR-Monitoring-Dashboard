@@ -1,0 +1,76 @@
+﻿@using FIT3077.Shared.Models
+<div>
+    <BarChart style="height: 260px" @ref="barChart" TItem="double" />
+</div>
+
+@code {
+
+    [Parameter]
+    public IReadOnlyList<Monitor> Monitors { get; set; }
+
+    BarChart<double> barChart;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (Monitors != null)
+        {
+            HandleRedraw();
+        }
+
+    }
+
+    void HandleRedraw()
+    {
+        barChart.Clear();
+
+        barChart.AddLabel(RetrieveNames().ToArray());
+
+        barChart.AddDataSet(GetBarChartDataset());
+
+        barChart.Update();
+    }
+
+    BarChartDataset<double> GetBarChartDataset()
+    {
+        return new BarChartDataset<double>
+        {
+            Label = "Cholesterol level",
+            Data = RetrieveCholesterolData(),
+            BackgroundColor = backgroundColors[0],
+            BorderColor = borderColors[0]
+        };
+    }
+
+    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f) };
+    List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f)};
+
+    List<double> RetrieveCholesterolData()
+    {
+        var dataSet = new List<double>();
+        foreach (var v in Monitors)
+        {
+            if (v.MeasurementList.CholesterolRecords.IsMonitored)
+            {
+                dataSet.Add(Convert.ToDouble(v.MeasurementList.CholesterolRecords.Records[0].CholesterolValue));
+            }
+        }
+
+        return dataSet;
+    }
+
+    List<string> RetrieveNames()
+    {
+        var Labels = new List<string>();
+        foreach (var v in Monitors)
+        {
+            if (v.MeasurementList.CholesterolRecords.IsMonitored)
+            {
+                Labels.Add(v.PatientName);
+            }
+        }
+
+        return Labels;
+    }
+
+}
+

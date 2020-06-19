@@ -8,7 +8,7 @@ namespace FIT3077.Shared.Models
     {
         public List<Record> Records { get; set; }
         public bool IsMonitored { get; set; } = true;
-        public void ChangeMonitoredState() {
+        public void ChangeMeasurementMonitoreState() {
             IsMonitored = !IsMonitored;
         }
     }
