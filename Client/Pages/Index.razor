@@ -13,10 +13,13 @@
         color: #FFF;
     }
 </style>
-<div class="top-row">
-    <XYinput OnClickHighBloodPressure="State.ProcessHighBloodInput"> </XYinput>
-    <Submission OnSearch="State.Search" IsSearching="State.SearchInProgress"></Submission>
+<div id="container">
+    <div class="top-row" id="navi">
+        <XYinput OnClickHighBloodPressure="State.ProcessHighBloodInput"> </XYinput>
+        <Submission OnSearch="State.Search" IsSearching="State.SearchInProgress"></Submission>
+    </div>
 </div>
+
 
 <div>
     <div class="container-fluid py-4">
@@ -48,6 +51,8 @@
             </div>
         </div>
     </div>
+    
+       
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
@@ -63,6 +68,8 @@
 
         </div>
     </div>
+        
+        
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
@@ -77,6 +84,8 @@
             </div>
         </div>
     </div>
+        
+    
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
@@ -90,7 +99,6 @@
         </div>
     </div>
 </div>
-
 @code{
 
 

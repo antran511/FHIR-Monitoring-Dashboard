@@ -20,18 +20,18 @@
             Labels = null;
         }
 
-        await HandleRedraw();
+        HandleRedraw();
     }
 
-    async Task HandleRedraw()
+    public void HandleRedraw()
     {
-        await barChart.Clear();
+        barChart.Clear();
 
-        await barChart.AddLabel(RetrieveNames().ToArray());
+        barChart.AddLabel(RetrieveNames().ToArray());
 
-        await barChart.AddDataSet(GetBarChartDataset());
+        barChart.AddDataSet(GetBarChartDataset());
 
-        await barChart.Update();
+        barChart.Update();
     }
 
     BarChartDataset<double> GetBarChartDataset()
