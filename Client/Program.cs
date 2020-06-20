@@ -8,6 +8,7 @@ using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using BlazorStyled;
 using FIT3077.Client.Services;
+using FIT3077.Shared.Models;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +31,8 @@ namespace FIT3077.Client
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddSingleton<IDashboardService, DashboardService>();
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
+            builder.Services.AddSingleton<Dashboard>();
             builder.Services.AddBlazorStyled();
             var host = builder.Build();
 

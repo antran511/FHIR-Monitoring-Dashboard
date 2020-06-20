@@ -15,10 +15,10 @@ namespace FIT3077.Client.Services
         public IReadOnlyList<Monitor> Monitors => Dashboard.Monitors;
 
         public IReadOnlyDictionary<string, Patient> Patients => Dashboard.Patients;
-
+        public Timer t => Dashboard.t;
         public bool SearchInProgress { get; private set; }
         public event Action OnChange;
-        public Timer t { get; set; }
+        
 
         private readonly HttpClient _http;
         public DashboardService(HttpClient httpClient)
@@ -31,35 +31,31 @@ namespace FIT3077.Client.Services
             SearchInProgress = true;
             NotifyStateChanged();
 
-            Dashboard.Patients = await _http.GetFromJsonAsync<Dictionary<string, Patient>>($"/api/practitioner/{patientId.Value}");
-            Dashboard.Monitors?.Clear();
+            Dashboard.FetchPatientList(
+                await _http.GetFromJsonAsync<Dictionary<string, Patient>>($"/api/practitioner/{patientId.Value}"));
+            Dashboard.ClearMonitor();
             SearchInProgress = false;
             NotifyStateChanged();
         }
 
         public async Task AddToMonitors(Patient patient)
         {
-            Monitor monitor = new Monitor(patient.Id, patient.Name);
             SearchInProgress = true;
             NotifyStateChanged();
 
-            monitor.MeasurementList = await FetchMeasurement(monitor);
-            Dashboard.RegisterMonitor(monitor);
+            Dashboard.RegisterMonitor(patient, await FetchMeasurement(patient.Id));
             SearchInProgress = false;
-            Dashboard.Patients.SingleOrDefault(p => p.Key == monitor.PatientId).Value.ChangePatientMonitorState();
             NotifyStateChanged();
         }
 
         public void RemoveFromMonitors(Monitor monitor)
         {
             Dashboard.DeregisterMonitor(monitor);
-            Dashboard.Patients.SingleOrDefault(p => p.Key == monitor.PatientId).Value.ChangePatientMonitorState();
             NotifyStateChanged();
         }
 
-        private async Task<Measurement> FetchMeasurement(Monitor monitor)
+        private async Task<Measurement> FetchMeasurement(string id)
         {
-            var id = monitor.PatientId;
             var fetchBloodPressureTask = _http.GetFromJsonAsync<List<BloodPressureRecord>>(
                 $"/api/patient/{id}/measurement/blood-pressure");
             var fetchCholesterolTask = _http.GetFromJsonAsync<List<CholesterolRecord>>(
@@ -85,7 +81,7 @@ namespace FIT3077.Client.Services
             {
                 foreach (var m in Dashboard.Monitors)
                 {
-                    m.MeasurementList = await FetchMeasurement(m);
+                    Dashboard.UpdateMeasurement(m, await FetchMeasurement(m.PatientId));
                 }
                 NotifyStateChanged();
             } 
@@ -108,7 +104,12 @@ namespace FIT3077.Client.Services
             Dashboard.HighBloodPressureFlag(highBloodValues);
             NotifyStateChanged();
         }
-       
+
+        public void CreateTimer()
+        {
+            Dashboard.t = new Timer();
+        }
+
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
 }

@@ -12,7 +12,7 @@ namespace FIT3077.Client.Services
         public IReadOnlyDictionary<string, Patient> Patients {get;  }
         public bool SearchInProgress { get; }
         public event Action OnChange;
-        public System.Timers.Timer t { get; set; }
+        public System.Timers.Timer t { get;  }
 
         Task Search(InputParameter patientId);
         Task AddToMonitors(Patient patient);
@@ -21,5 +21,6 @@ namespace FIT3077.Client.Services
         Task Update();
         void SetTime(InputParameter timeInput);
         void ProcessHighBloodInput(SysDiastolicThreshold highBloodValues);
+        void CreateTimer();
     }
 }

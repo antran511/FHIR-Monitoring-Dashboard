@@ -94,7 +94,7 @@
     protected override void OnInitialized()
     {
         //Create timer for interval update
-        DashboardService.t = new System.Timers.Timer();
+        DashboardService.CreateTimer();
         DashboardService.t.Elapsed += async (s, e) =>
         {
             await DashboardService.Update();
