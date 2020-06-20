@@ -13,6 +13,12 @@ namespace FIT3077.Shared.Models
         public Timer t { get; set; }
         private SysDiastolicThreshold SysDiastolicValues { get; set; } = new SysDiastolicThreshold();
 
+        /// <summary>
+        /// This method register a patient to a monitored list, when registering it will check the level of cholesterol and bloodpressure
+        /// to display on the page appropriately
+        /// </summary>
+        /// <param name="patient"></param>
+        /// <param name="measurement"></param>
         public void RegisterMonitor(Patient patient, Measurement measurement)
         {
             Monitor monitor = new Monitor(patient.Id, patient.Name);
@@ -24,6 +30,9 @@ namespace FIT3077.Shared.Models
             HighBloodPressureFlag(SysDiastolicValues);
         }
 
+        /// <summary>
+        /// This method sets the flag if the patient has a high cholesterol level than the average cholesterol
+        /// </summary>
         public void HighCholFlag()
         {
             double totalChol = 0.0;
@@ -41,7 +50,12 @@ namespace FIT3077.Shared.Models
                 t.CholFlag = val > averageChol;
             }
         }
-
+        
+        /// <summary>
+        /// this method sets the systolic and diastolic flag for patients who has high level of Systolic and Diastolic blood pressure
+        /// compare to the input value that the practitioner put in
+        /// </summary>
+        /// <param name="highBloodValues"></param>
         public void HighBloodPressureFlag(SysDiastolicThreshold highBloodValues)
         {
             SysDiastolicValues = highBloodValues;
@@ -58,7 +72,10 @@ namespace FIT3077.Shared.Models
             
         }
 
-
+        /// <summary>
+        /// This method deregister a patient from monitor list
+        /// </summary>
+        /// <param name="monitor"></param>
         public void DeregisterMonitor(Monitor monitor)
         {
             var patient = Patients.SingleOrDefault(p => p.Value.Id == monitor.PatientId).Value;
@@ -67,11 +84,20 @@ namespace FIT3077.Shared.Models
             HighCholFlag();
         }
 
+        /// <summary>
+        /// this method change the IsMonitored flag attribute of the patient
+        /// </summary>
+        /// <param name="patient"></param>
         public void ChangePatientMonitorState(Patient patient)
         {
             patient.ChangePatientMonitorState();
         }
 
+        /// <summary>
+        /// this method updates the new measurement lists that indicates whether each list (cholesterol or bloodpressure) is monitored
+        /// </summary>
+        /// <param name="monitor"></param>
+        /// <param name="measurementList"></param>
         public void UpdateMeasurement(Monitor monitor, Measurement measurementList)
         {
             var bloodPressureState = monitor.MeasurementList.BloodPressureRecords.IsMonitored;

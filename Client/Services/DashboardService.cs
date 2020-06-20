@@ -26,6 +26,11 @@ namespace FIT3077.Client.Services
             _http = httpClient;
         }
 
+        /// <summary>
+        /// This function redirect to the search function in the practitioner controller to perform search query in FHIR server passing in the practitionerId as the input parameter
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <returns></returns>
         public async Task Search(InputParameter patientId)
         {
             SearchInProgress = true;
@@ -38,6 +43,11 @@ namespace FIT3077.Client.Services
             NotifyStateChanged();
         }
 
+        /// <summary>
+        /// This function use the instance Dashboard to add a patient from patient list into monitor list and notify state change
+        /// </summary>
+        /// <param name="patient"></param>
+        /// <returns></returns>
         public async Task AddToMonitors(Patient patient)
         {
             SearchInProgress = true;
@@ -48,12 +58,22 @@ namespace FIT3077.Client.Services
             NotifyStateChanged();
         }
 
+        /// <summary>
+        /// This function removes a monitored patient from the monitored list by using an instance of Dashboard to call the DeregisterMonitor function
+        /// </summary>
+        /// <param name="monitor"></param>
         public void RemoveFromMonitors(Monitor monitor)
         {
             Dashboard.DeregisterMonitor(monitor);
             NotifyStateChanged();
         }
 
+        /// <summary>
+        /// This function redirects to the patient controller to fetch 2 types of measurements (cholesterol and bloodpressure) from the FHIR server
+        /// and adds those 2 types of measurements in a measurement object and return that object
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>measurements</returns>
         private async Task<Measurement> FetchMeasurement(string id)
         {
             var fetchBloodPressureTask = _http.GetFromJsonAsync<List<BloodPressureRecord>>(
@@ -75,6 +95,10 @@ namespace FIT3077.Client.Services
             NotifyStateChanged();
         }
 
+        /// <summary>
+        /// this function calls the Updatemeasurement function in Dashboard to update the new measurement fetched from FHIR server
+        /// </summary>
+        /// <returns></returns>
         public async Task Update()
         {
             if (Dashboard.Monitors != null && Dashboard.Monitors.Count > 1)
@@ -86,6 +110,7 @@ namespace FIT3077.Client.Services
                 NotifyStateChanged();
             } 
         }
+
         public void SetTime(InputParameter timeInput)
         {
             try
@@ -99,6 +124,11 @@ namespace FIT3077.Client.Services
             }
         }
 
+        /// <summary>
+        /// this function takes in a SysDiastolicThreshold object as input and pass that object to the function inside Dashboard called HighBloodPressureFlag
+        /// to set the flag of the blood pressure accordingly.
+        /// </summary>
+        /// <param name="highBloodValues"></param>
         public void ProcessHighBloodInput(SysDiastolicThreshold highBloodValues)
         {
             Dashboard.HighBloodPressureFlag(highBloodValues);
