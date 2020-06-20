@@ -8,11 +8,15 @@ namespace FIT3077.Shared.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public bool IsMonitored { get; private set; } = false;
+        public bool AddedToMonitor { get; private set; } = false;
 
+        /// <summary>
+        /// This function reverse the current state of AddedToMonitor value
+        /// </summary>
+        /// <returns></returns>
         public void ChangePatientMonitorState()
         {
-            IsMonitored = !IsMonitored;
+            AddedToMonitor = !AddedToMonitor;
         }
     }
 }

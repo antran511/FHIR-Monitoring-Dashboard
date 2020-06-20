@@ -22,6 +22,11 @@ namespace FIT3077.Server.Controllers
             _client = new FhirClient("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/");
         }
 
+        /// <summary>
+        /// This function query the blood pressure values of a patient
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>List of up to 5 blood pressure records</returns>
         [HttpGet("{id}/measurement/blood-pressure")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<List<BloodPressureRecord>> FetchBloodPressure(string id)
@@ -55,9 +60,13 @@ namespace FIT3077.Server.Controllers
             }
 
             return bloodPressureRecords;
-
-
         }
+
+        /// <summary>
+        /// This function query the cholesterol vlaue of a patient
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>List of up to 1 cholesterol record</returns>
         [HttpGet("{id}/measurement/cholesterol")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<List<CholesterolRecord>> FetchCholesterol(string id)

@@ -10,6 +10,9 @@
 
     BarChart<double> barChart;
 
+    /// <summary>
+    /// This function is called after a component has finished rendering. This stage is to initialize Blazorise library
+    /// </summary>
     protected override void OnAfterRender(bool firstRender)
     {
         if (Monitors != null)
@@ -19,6 +22,9 @@
 
     }
 
+    /// <summary>
+    /// This function clear old data, add new data and update the latest chart
+    /// </summary>
     void HandleRedraw()
     {
         barChart.Clear();
@@ -29,7 +35,10 @@
 
         barChart.Update();
     }
-
+    /// <summary>
+    /// This function create a new bar chart for dataset
+    /// </summary>
+    /// <returns> New bar chart dataset </returns>
     BarChartDataset<double> GetBarChartDataset()
     {
         return new BarChartDataset<double>
@@ -43,7 +52,10 @@
 
     List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f) };
     List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f)};
-
+    /// <summary>
+    /// This function retrieve cholesterol value in Monitors
+    /// </summary>
+    /// <returns> List of cholesterol value in type of double</returns>
     List<double> RetrieveCholesterolData()
     {
         var dataSet = new List<double>();
@@ -57,7 +69,10 @@
 
         return dataSet;
     }
-
+    /// <summary>
+    /// This function retrieve name of patients in Monitors
+    /// </summary>
+    /// <returns> List of patients' name
     List<string> RetrieveNames()
     {
         var Labels = new List<string>();

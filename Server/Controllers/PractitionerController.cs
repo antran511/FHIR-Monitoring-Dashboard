@@ -20,6 +20,12 @@ namespace FIT3077.Server.Controllers
             _client = new FhirClient("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/");
         }
 
+
+        /// <summary>
+        /// This function query all the patient treated by the practitioner
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>List of all patients treated by this practitioner</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Dictionary<string, Patient>> SearchAllPatients(string id)

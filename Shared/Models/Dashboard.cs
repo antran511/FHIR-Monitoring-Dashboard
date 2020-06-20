@@ -85,7 +85,7 @@ namespace FIT3077.Shared.Models
         }
 
         /// <summary>
-        /// this method change the IsMonitored flag attribute of the patient
+        /// this method change the AddedToMonitor flag attribute of the patient
         /// </summary>
         /// <param name="patient"></param>
         public void ChangePatientMonitorState(Patient patient)
@@ -107,11 +107,18 @@ namespace FIT3077.Shared.Models
             monitor.MeasurementList.BloodPressureRecords.IsMonitored = bloodPressureState;
         }
 
+        /// <summary>
+        /// This methods assign patient list requested from backend assign it to Patients instance in Dashboard model
+        /// </summary>
+        /// <param name="patients"></param>
         public void FetchPatientList(Dictionary<string, Patient> patients)
         {
             Patients = patients;
         }
 
+        /// <summary>
+        /// This methods clear all monitors in Monitor list
+        /// </summary>
         public void ClearMonitor()
         {
             Monitors?.Clear();

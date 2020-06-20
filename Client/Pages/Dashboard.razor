@@ -91,7 +91,9 @@
 
 @code{
 
-
+    /// <summary>
+    /// This function is invoked when the component is initialized after having received its initial parameters from its parent component in SetParameters.
+    /// </summary>
     protected override void OnInitialized()
     {
         //Create timer for interval update
@@ -102,10 +104,13 @@
         };
         DashboardService.t.Interval = 1000 * 60 * 5;
         DashboardService.t.Start();
-        //Subscribe to the services
+        //Call StateHasChange and rerender components
         DashboardService.OnChange += StateHasChanged;
     }
 
+    /// <summary>
+    /// This function clears unmanaged resources
+    /// </summary>
     public void Dispose()
     {
         DashboardService.OnChange -= StateHasChanged;

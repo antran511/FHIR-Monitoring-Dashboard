@@ -111,6 +111,11 @@ namespace FIT3077.Client.Services
             } 
         }
 
+        /// <summary>
+        /// This function set parameter as a new interval setting for the timer
+        /// </summary>
+        /// <param name="timeInput"></param>
+        /// <returns></returns>
         public void SetTime(InputParameter timeInput)
         {
             try
@@ -135,11 +140,18 @@ namespace FIT3077.Client.Services
             NotifyStateChanged();
         }
 
+        /// <summary>
+        /// This function create a new timer instance in Dashboard model
+        /// </summary>
+        /// <returns></returns>
         public void CreateTimer()
         {
             Dashboard.t = new Timer();
         }
-
+        /// <summary>
+        /// This function invokes OnChange property itself
+        /// </summary>
+        /// <returns></returns>
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
 }

@@ -13,6 +13,9 @@
 
     LineChart<double> lineChart;
 
+    /// <summary>
+    /// This function is called after a component has finished rendering. This stage is to initialize Blazorise library
+    /// </summary>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -21,6 +24,9 @@
         }
     }
 
+    /// <summary>
+    /// This function clear old data, add new data and update the latest chart
+    /// </summary>
     async Task HandleRedraw()
     {
         await lineChart.Clear();
@@ -32,6 +38,10 @@
         await lineChart.Update();
     }
 
+    /// <summary>
+    /// This function create a new line chart for dataset
+    /// </summary>
+    /// <returns> New line chart dataset </returns>
     LineChartDataset<double> GetLineChartDataset()
     {
         return new LineChartDataset<double>
@@ -50,6 +60,10 @@
     List<string> backgroundColors = new List<string> { ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
     List<string> borderColors = new List<string> { ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
 
+    /// <summary>
+    /// This function retrieve systolic value in Monitors
+    /// </summary>
+    /// <returns> List of systolic value in type of double</returns>
     List<double> RetrieveData()
     {
         var dataSet = new List<double>();
